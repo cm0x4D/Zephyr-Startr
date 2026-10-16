@@ -21,8 +21,8 @@ No backend server is required — everything runs entirely client-side and can b
   * **One-Click Generate (`Ctrl + ⏎`)**: Creates and downloads `{projectName}.zip` on the fly using JSZip.
   * **Shareable Links**: Encodes project configurations into the URL for instant sharing and bookmarking.
   * **Application Presets**: Quick templates for Blinky / Status LED, Minimal Hello World, Bluetooth LE, Shell CLI, Sensor Reader, and IoT Network Client.
-* **Clear Flashing Instructions (`README.txt`)**:
-  Every generated ZIP includes a clean, standalone `README.txt` and `README.md` explaining exact step-by-step commands to initialize West, install requirements, compile for your board (`west build -b <board>`), and flash over USB/JTAG (`west flash`).
+* **Comprehensive Documentation (`README.md`)**:
+  Every generated ZIP includes a detailed, standalone `README.md` with step-by-step instructions for Python virtual environments (`venv`), host preparation for **macOS** (Homebrew) and Linux/Windows, West workspace initialization (`west init -l <app>`), building (`west build -b <board>`), flashing (`west flash`), and serial terminal monitoring.
 
 ---
 

@@ -55,6 +55,9 @@ export const FileExplorerModal: React.FC<FileExplorerModalProps> = ({
     if (name.endsWith('.conf')) {
       return <FileText className="tree-file-icon text-success" />;
     }
+    if (name.endsWith('.md')) {
+      return <FileText className="tree-file-icon text-info" />;
+    }
     return <File className="tree-file-icon text-muted" />;
   };
 
