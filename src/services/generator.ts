@@ -1,14 +1,52 @@
 import JSZip from 'jszip';
 import type { Board, GeneratedFile, Module, ProjectConfig } from '../types';
 
+export function inferBoardDetails(boardId: string): { vendorKey: string; arch: string; name: string } {
+  const id = (boardId || '').toLowerCase();
+
+  if (id.includes('nrf') || id.includes('nordic')) {
+    return { vendorKey: 'nordic', arch: 'arm', name: 'Nordic nRF52/nRF53/nRF54 Board' };
+  }
+  if (id.includes('stm32') || id.includes('nucleo') || id.includes('disco')) {
+    return { vendorKey: 'st', arch: 'arm', name: 'STM32 Board' };
+  }
+  if (id.includes('esp32') || id.includes('esp_') || id.includes('espressif')) {
+    const isRiscv = id.includes('c3') || id.includes('c6') || id.includes('p4');
+    return { vendorKey: 'espressif', arch: isRiscv ? 'riscv' : 'xtensa', name: 'Espressif ESP32 Board' };
+  }
+  if (id.includes('pico') || id.includes('rp2040') || id.includes('rp2350')) {
+    return { vendorKey: 'raspberrypi', arch: 'arm', name: 'Raspberry Pi Pico' };
+  }
+  if (id.includes('sam') || id.includes('atmel') || id.includes('microchip') || id.includes('avr')) {
+    return { vendorKey: 'atmel', arch: 'arm', name: 'Microchip/Atmel Board' };
+  }
+  if (id.includes('imx') || id.includes('lpc') || id.includes('nxp') || id.includes('frdm')) {
+    return { vendorKey: 'nxp', arch: 'arm', name: 'NXP Board' };
+  }
+  if (id.includes('efm32') || id.includes('efr32') || id.includes('silabs')) {
+    return { vendorKey: 'silabs', arch: 'arm', name: 'Silicon Labs Board' };
+  }
+  if (id.includes('native') || id.includes('posix') || id.includes('qemu_x86')) {
+    return { vendorKey: 'posix', arch: 'posix', name: 'POSIX Simulator' };
+  }
+
+  // Fallback default: Most MCU targets in Zephyr are ARM-based
+  return { vendorKey: 'unknown', arch: 'arm', name: boardId };
+}
+
 export function getVendorHal(vendorKey: string, arch: string): string[] {
   const vk = (vendorKey || '').toLowerCase();
   const a = (arch || '').toLowerCase();
 
   const hals: string[] = [];
 
-  if (a === 'arm' || a === 'arm64') {
+  // ARM architectures (Cortex-M, Cortex-R, Cortex-A) require CMSIS core headers.
+  // In Zephyr, Cortex-M uses cmsis_6 for modern releases (v3.7+, v4.x, main)
+  // while Cortex-A/R and older releases use cmsis. Both are needed to guarantee
+  // cmsis_core.h is present during compilation.
+  if (a === 'arm' || a === 'arm64' || !a) {
     hals.push('cmsis');
+    hals.push('cmsis_6');
   }
 
   switch (vk) {
@@ -17,6 +55,7 @@ export function getVendorHal(vendorKey: string, arch: string): string[] {
       break;
     case 'st':
       hals.push('hal_stm32');
+      hals.push('hal_st');
       break;
     case 'espressif':
       hals.push('hal_espressif');
@@ -34,11 +73,13 @@ export function getVendorHal(vendorKey: string, arch: string): string[] {
       hals.push('hal_silabs');
       break;
     case 'infineon':
+    case 'cypress':
       hals.push('hal_infineon');
       break;
     case 'atmel':
     case 'microchip':
       hals.push('hal_atmel');
+      hals.push('hal_microchip');
       break;
     case 'renesas':
       hals.push('hal_renesas');
@@ -47,10 +88,26 @@ export function getVendorHal(vendorKey: string, arch: string): string[] {
       hals.push('hal_ambiq');
       break;
     case 'gigadevice':
+    case 'gd':
       hals.push('hal_gigadevice');
       break;
     case 'telink':
       hals.push('hal_telink');
+      break;
+    case 'nuvoton':
+      hals.push('hal_nuvoton');
+      break;
+    case 'adi':
+      hals.push('hal_adi');
+      break;
+    case 'realtek':
+      hals.push('hal_realtek');
+      break;
+    case 'sifli':
+      hals.push('hal_sifli');
+      break;
+    case 'wch':
+      hals.push('hal_wch');
       break;
     case 'posix':
     case 'native':
@@ -69,14 +126,14 @@ export function getVendorHal(vendorKey: string, arch: string): string[] {
 export function generateWestManifest(config: ProjectConfig, modules: Module[], board?: Board): string {
   const allowlistSet = new Set<string>();
 
-  // Add board HALs
-  if (board) {
-    const hals = getVendorHal(board.vendorKey, board.arch);
-    for (const h of hals) {
-      allowlistSet.add(h);
-    }
-  } else {
-    allowlistSet.add('cmsis');
+  // Determine vendorKey and arch with fallback to boardId inference
+  const inferred = inferBoardDetails(config.boardId);
+  const vendorKey = board?.vendorKey || inferred.vendorKey;
+  const arch = board?.arch || inferred.arch;
+
+  const hals = getVendorHal(vendorKey, arch);
+  for (const h of hals) {
+    allowlistSet.add(h);
   }
 
   // Add required West modules from selected modules
@@ -400,10 +457,11 @@ __pycache__/
 }
 
 export function generateReadmeMd(config: ProjectConfig, modules: Module[], board?: Board): string {
-  const boardName = board ? board.name : config.boardId;
+  const inferred = inferBoardDetails(config.boardId);
+  const boardName = board ? board.name : inferred.name;
   const boardId = board ? board.id : config.boardId;
-  const vendor = board ? board.vendor : 'Unknown';
-  const arch = board ? board.arch : 'arm';
+  const vendor = board ? board.vendor : (inferred.vendorKey !== 'unknown' ? inferred.vendorKey.toUpperCase() : 'Generic');
+  const arch = board ? board.arch : inferred.arch;
   const isStandalone = config.workspaceType !== 'application';
 
   let modsTable = '| Module | Category | Required West Projects | Description |\n|---|---|---|---|\n';
