@@ -45,31 +45,31 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         <div className="action-buttons">
           <button
             type="button"
-            className="action-btn btn-secondary btn-secondary-action"
+            className="action-btn btn-secondary"
             onClick={onReset}
             title="Reset configuration to default"
           >
-            <RotateCcw className="icon-sm" />
+            <RotateCcw className="icon-xs" />
             <span className="btn-label">Reset</span>
           </button>
 
           <button
             type="button"
-            className="action-btn btn-secondary btn-secondary-action"
+            className="action-btn btn-secondary"
             onClick={onShare}
             title="Share configuration via URL"
           >
-            <Share2 className="icon-sm" />
+            <Share2 className="icon-xs" />
             <span className="btn-label">Share</span>
           </button>
 
           <button
             type="button"
-            className="action-btn btn-dark btn-explore-prominent"
+            className="action-btn btn-dark"
             onClick={onExplore}
             title="Explore workspace files (Ctrl + Space)"
           >
-            <FolderTree className="icon-sm text-accent" />
+            <FolderTree className="icon-xs text-accent" />
             <span className="btn-label">Explore</span>
             <kbd className="key-hint">Ctrl + Space</kbd>
           </button>
@@ -81,7 +81,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
             disabled={isGenerating}
             title="Generate & download West workspace zip (Ctrl + Enter)"
           >
-            <Download className={`icon-md ${isGenerating ? 'spin' : ''}`} />
+            <Download className={`icon-sm ${isGenerating ? 'spin' : ''}`} />
             <span className="btn-label">Generate Project</span>
             <kbd className="key-hint primary-hint">Ctrl + ⏎</kbd>
           </button>
