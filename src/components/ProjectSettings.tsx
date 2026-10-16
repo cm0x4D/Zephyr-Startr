@@ -42,79 +42,82 @@ export const ProjectSettings: React.FC<ProjectSettingsProps> = ({
       </div>
 
       <div className="form-grid">
-        {/* Project Name */}
-        <div className="form-group">
-          <label className="form-label" htmlFor="projectName">
-            Project Name / Artifact
-          </label>
-          <div className="input-wrap">
-            <input
-              id="projectName"
-              type="text"
-              className="text-input"
-              value={config.name}
-              placeholder="my-zephyr-app"
-              onChange={(e) => {
-                const safe = e.target.value.toLowerCase().replace(/[^a-z0-9-_]/g, '-');
-                onChangeConfig({ name: safe });
-              }}
-            />
+        {/* Project Name and Release Row */}
+        <div className="form-row-2col">
+          {/* Project Name */}
+          <div className="form-group">
+            <label className="form-label" htmlFor="projectName">
+              Project Name / Artifact
+            </label>
+            <div className="input-wrap">
+              <input
+                id="projectName"
+                type="text"
+                className="text-input"
+                value={config.name}
+                placeholder="my-zephyr-app"
+                onChange={(e) => {
+                  const safe = e.target.value.toLowerCase().replace(/[^a-z0-9-_]/g, '-');
+                  onChangeConfig({ name: safe });
+                }}
+              />
+            </div>
+            <span className="form-hint">Identifier used for West workspace directory and CMake project name</span>
           </div>
-          <span className="form-hint">Identifier used for West workspace directory and CMake project name</span>
-        </div>
 
-        {/* Zephyr Release */}
-        <div className="form-group">
-          <label className="form-label">Zephyr Release Version</label>
-          <div className="pill-group">
-            {prominentReleases.map((rel) => {
-              const isSelected = config.zephyrVersion === rel.tag;
-              return (
-                <button
-                  key={rel.tag}
-                  type="button"
-                  className={`pill-btn ${isSelected ? 'active' : ''}`}
-                  onClick={() => onChangeConfig({ zephyrVersion: rel.tag })}
-                >
-                  <span className="pill-title">{rel.tag}</span>
-                  {rel.lts && <span className="pill-badge lts">LTS</span>}
-                  {rel.isLatest && <span className="pill-badge latest">Latest</span>}
-                  {rel.isBranch && <span className="pill-badge dev">Dev</span>}
-                </button>
-              );
-            })}
+          {/* Zephyr Release */}
+          <div className="form-group">
+            <label className="form-label">Zephyr Release Version</label>
+            <div className="pill-group">
+              {prominentReleases.map((rel) => {
+                const isSelected = config.zephyrVersion === rel.tag;
+                return (
+                  <button
+                    key={rel.tag}
+                    type="button"
+                    className={`pill-btn ${isSelected ? 'active' : ''}`}
+                    onClick={() => onChangeConfig({ zephyrVersion: rel.tag })}
+                  >
+                    <span className="pill-title">{rel.tag}</span>
+                    {rel.lts && <span className="pill-badge lts">LTS</span>}
+                    {rel.isLatest && <span className="pill-badge latest">Latest</span>}
+                    {rel.isBranch && <span className="pill-badge dev">Dev</span>}
+                  </button>
+                );
+              })}
 
-            {otherReleases.length > 0 && (
-              <div className="select-wrapper">
-                <select
-                  className="pill-select"
-                  value={
-                    prominentReleases.some((r) => r.tag === config.zephyrVersion)
-                      ? ''
-                      : config.zephyrVersion
-                  }
-                  onChange={(e) => {
-                    if (e.target.value) {
-                      onChangeConfig({ zephyrVersion: e.target.value });
+              {otherReleases.length > 0 && (
+                <div className="select-wrapper">
+                  <select
+                    className="pill-select"
+                    value={
+                      prominentReleases.some((r) => r.tag === config.zephyrVersion)
+                        ? ''
+                        : config.zephyrVersion
                     }
-                  }}
-                >
-                  <option value="" disabled>
-                    More versions...
-                  </option>
-                  {otherReleases.map((rel) => (
-                    <option key={rel.tag} value={rel.tag}>
-                      {rel.tag} {rel.lts ? '(LTS)' : ''}
+                    onChange={(e) => {
+                      if (e.target.value) {
+                        onChangeConfig({ zephyrVersion: e.target.value });
+                      }
+                    }}
+                  >
+                    <option value="" disabled>
+                      More versions...
                     </option>
-                  ))}
-                </select>
-                <ChevronDown className="select-arrow icon-xs" />
-              </div>
-            )}
+                    {otherReleases.map((rel) => (
+                      <option key={rel.tag} value={rel.tag}>
+                        {rel.tag} {rel.lts ? '(LTS)' : ''}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="select-arrow icon-xs" />
+                </div>
+              )}
+            </div>
+            <span className="form-hint">
+              Upstream Zephyr git revision checked out into workspace during <code>west update</code>
+            </span>
           </div>
-          <span className="form-hint">
-            Upstream Zephyr git revision checked out into workspace during <code>west update</code>
-          </span>
         </div>
 
         {/* Target Board */}

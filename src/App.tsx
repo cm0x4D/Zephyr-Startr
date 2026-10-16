@@ -309,34 +309,31 @@ export const App: React.FC = () => {
             </div>
           </div>
 
-          <div className="panels-grid">
-            {/* Left Column: Project Configuration */}
-            <div className="panel-col left-col">
-              <ProjectSettings
-                config={config}
-                releases={releases}
-                currentBoard={currentBoard}
-                templates={DEFAULT_TEMPLATES}
-                onChangeConfig={handleChangeConfig}
-                onOpenBoardModal={() => setIsBoardModalOpen(true)}
-              />
+          <div className="panels-flow">
+            {/* 1. Project Settings: Name, Zephyr Release, Target Board, and Sample / Template Presets */}
+            <ProjectSettings
+              config={config}
+              releases={releases}
+              currentBoard={currentBoard}
+              templates={DEFAULT_TEMPLATES}
+              onChangeConfig={handleChangeConfig}
+              onOpenBoardModal={() => setIsBoardModalOpen(true)}
+            />
 
-              <KconfigEditor
-                modules={selectedModules}
-                customKconfig={config.customKconfig}
-                onChangeCustomKconfig={(custom) => handleChangeConfig({ customKconfig: custom })}
-              />
-            </div>
+            {/* 2. Modules & Dependencies: Full Available Width */}
+            <Dependencies
+              modules={modules}
+              selectedModuleIds={config.selectedModuleIds}
+              onToggleModule={handleToggleModule}
+              onRemoveModule={handleRemoveModule}
+            />
 
-            {/* Right Column: Dependencies */}
-            <div className="panel-col right-col">
-              <Dependencies
-                modules={modules}
-                selectedModuleIds={config.selectedModuleIds}
-                onToggleModule={handleToggleModule}
-                onRemoveModule={handleRemoveModule}
-              />
-            </div>
+            {/* 3. Kconfig Configuration & Overrides */}
+            <KconfigEditor
+              modules={selectedModules}
+              customKconfig={config.customKconfig}
+              onChangeCustomKconfig={(custom) => handleChangeConfig({ customKconfig: custom })}
+            />
           </div>
         </div>
       </main>
