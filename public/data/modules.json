@@ -1,0 +1,1018 @@
+[
+  {
+    "id": "logging",
+    "name": "Logging Subsystem",
+    "category": "Core",
+    "description": "Zephyr flexible logging framework with multiple backends (UART, RTT, RAM) and log level filtering.",
+    "kconfig": [
+      "CONFIG_LOG=y",
+      "CONFIG_LOG_DEFAULT_LEVEL=3",
+      "CONFIG_LOG_PRINTK=y"
+    ],
+    "tags": [
+      "log",
+      "debug",
+      "uart",
+      "rtt",
+      "diagnostics"
+    ],
+    "defaultSelected": true,
+    "includes": [
+      "<zephyr/logging/log.h>"
+    ],
+    "mainInit": "LOG_INF(\"Application started on board: %s\", CONFIG_BOARD);\n"
+  },
+  {
+    "id": "shell",
+    "name": "Interactive Shell",
+    "category": "Core",
+    "description": "Command-line interface over UART/RTT/USB for live debugging, inspection, and triggering commands.",
+    "kconfig": [
+      "CONFIG_SHELL=y",
+      "CONFIG_SHELL_BACKENDS=y",
+      "CONFIG_SHELL_BACKEND_SERIAL=y"
+    ],
+    "tags": [
+      "cli",
+      "terminal",
+      "console",
+      "command",
+      "uart"
+    ],
+    "includes": [
+      "<zephyr/shell/shell.h>"
+    ],
+    "mainInit": "/* Shell backend runs automatically on registered transport */\n"
+  },
+  {
+    "id": "console",
+    "name": "Console & Printk",
+    "category": "Core",
+    "description": "Standard serial console output and kernel printk() support for formatted diagnostic messages.",
+    "kconfig": [
+      "CONFIG_CONSOLE=y",
+      "CONFIG_UART_CONSOLE=y",
+      "CONFIG_PRINTK=y"
+    ],
+    "tags": [
+      "printf",
+      "printk",
+      "serial",
+      "uart",
+      "stdout"
+    ],
+    "defaultSelected": true,
+    "includes": [
+      "<zephyr/sys/printk.h>"
+    ],
+    "mainInit": "printk(\"ZephyrInit Application Booted!\\n\");\n"
+  },
+  {
+    "id": "timing",
+    "name": "Kernel Timing & Clocks",
+    "category": "Core",
+    "description": "High resolution timers, software timers (k_timer), uptime queries, and cycle counters.",
+    "kconfig": [
+      "CONFIG_SYS_CLOCK_EXISTS=y"
+    ],
+    "tags": [
+      "timer",
+      "clock",
+      "delay",
+      "uptime"
+    ],
+    "includes": [
+      "<zephyr/kernel.h>"
+    ]
+  },
+  {
+    "id": "gpio",
+    "name": "GPIO (General Purpose I/O)",
+    "category": "Drivers",
+    "description": "Universal GPIO controller API for pin input/output, interrupts, buttons, and status LEDs.",
+    "kconfig": [
+      "CONFIG_GPIO=y"
+    ],
+    "tags": [
+      "pin",
+      "led",
+      "button",
+      "switch",
+      "io",
+      "interrupt"
+    ],
+    "defaultSelected": true,
+    "includes": [
+      "<zephyr/drivers/gpio.h>"
+    ],
+    "mainInit": "/* Standard GPIO initialization: dt_spec led / button */\n"
+  },
+  {
+    "id": "i2c",
+    "name": "I2C Bus Controller",
+    "category": "Drivers",
+    "description": "Inter-Integrated Circuit 2-wire serial bus driver for digital sensors, RTCs, displays, and EEPROMs.",
+    "kconfig": [
+      "CONFIG_I2C=y"
+    ],
+    "tags": [
+      "twi",
+      "wire",
+      "sensor",
+      "bus",
+      "peripheral"
+    ],
+    "includes": [
+      "<zephyr/drivers/i2c.h>"
+    ]
+  },
+  {
+    "id": "spi",
+    "name": "SPI Bus Controller",
+    "category": "Drivers",
+    "description": "Serial Peripheral Interface bus for high-speed communication with displays, flash memories, and radios.",
+    "kconfig": [
+      "CONFIG_SPI=y"
+    ],
+    "tags": [
+      "serial",
+      "bus",
+      "nor flash",
+      "display",
+      "miso",
+      "mosi"
+    ],
+    "includes": [
+      "<zephyr/drivers/spi.h>"
+    ]
+  },
+  {
+    "id": "adc",
+    "name": "ADC (Analog to Digital)",
+    "category": "Drivers",
+    "description": "Multi-channel analog voltage sampling and conversion subsystem.",
+    "kconfig": [
+      "CONFIG_ADC=y"
+    ],
+    "tags": [
+      "analog",
+      "voltage",
+      "sampling",
+      "potentiometer",
+      "battery"
+    ],
+    "includes": [
+      "<zephyr/drivers/adc.h>"
+    ]
+  },
+  {
+    "id": "pwm",
+    "name": "PWM (Pulse Width Modulation)",
+    "category": "Drivers",
+    "description": "Hardware PWM generation for LED brightness control, motor drivers, audio tones, and servos.",
+    "kconfig": [
+      "CONFIG_PWM=y"
+    ],
+    "tags": [
+      "pulse",
+      "motor",
+      "dimming",
+      "buzzer",
+      "servo"
+    ],
+    "includes": [
+      "<zephyr/drivers/pwm.h>"
+    ]
+  },
+  {
+    "id": "sensor",
+    "name": "Sensor Subsystem",
+    "category": "Drivers",
+    "description": "Unified sensor framework with standardized channels (accel, gyro, temp, humidity, pressure, light).",
+    "kconfig": [
+      "CONFIG_SENSOR=y"
+    ],
+    "tags": [
+      "temperature",
+      "humidity",
+      "accelerometer",
+      "gyroscope",
+      "barometer",
+      "imu"
+    ],
+    "includes": [
+      "<zephyr/drivers/sensor.h>"
+    ],
+    "mainInit": "/* Read sensors using sensor_sample_fetch() and sensor_channel_get() */\n"
+  },
+  {
+    "id": "display",
+    "name": "Display Subsystem",
+    "category": "Drivers",
+    "description": "Frame-buffered graphic and character display driver interface for OLEDs, LCDs, and E-Paper panels.",
+    "kconfig": [
+      "CONFIG_DISPLAY=y"
+    ],
+    "tags": [
+      "screen",
+      "lcd",
+      "oled",
+      "epaper",
+      "gui"
+    ],
+    "includes": [
+      "<zephyr/drivers/display.h>"
+    ]
+  },
+  {
+    "id": "led_strip",
+    "name": "LED Strip (WS2812/NeoPixel)",
+    "category": "Drivers",
+    "description": "Driver support for addressable smart RGB/RGBW LED strips like WS2812, APA102, and SK6812.",
+    "kconfig": [
+      "CONFIG_LED_STRIP=y"
+    ],
+    "tags": [
+      "neopixel",
+      "ws2812",
+      "rgb",
+      "lighting"
+    ],
+    "includes": [
+      "<zephyr/drivers/led_strip.h>"
+    ]
+  },
+  {
+    "id": "watchdog",
+    "name": "Hardware Watchdog",
+    "category": "Drivers",
+    "description": "Independent hardware watchdog timer to reset or recover MCU on software hang or lockup.",
+    "kconfig": [
+      "CONFIG_WATCHDOG=y",
+      "CONFIG_WDT_DISABLE_AT_BOOT=n"
+    ],
+    "tags": [
+      "wdt",
+      "safety",
+      "reset",
+      "reliability"
+    ],
+    "includes": [
+      "<zephyr/drivers/watchdog.h>"
+    ]
+  },
+  {
+    "id": "can",
+    "name": "CAN / CAN-FD Controller",
+    "category": "Drivers",
+    "description": "Controller Area Network automotive and industrial bus driver with filtering and FD baudrates.",
+    "kconfig": [
+      "CONFIG_CAN=y",
+      "CONFIG_CAN_ACCEPT_ALL=y"
+    ],
+    "tags": [
+      "automotive",
+      "industrial",
+      "canbus",
+      "fd"
+    ],
+    "includes": [
+      "<zephyr/drivers/can.h>"
+    ]
+  },
+  {
+    "id": "input",
+    "name": "Input Subsystem",
+    "category": "Drivers",
+    "description": "Unified event framework for buttons, keyboard matrix, rotaries, touch screens, and trackballs.",
+    "kconfig": [
+      "CONFIG_INPUT=y"
+    ],
+    "tags": [
+      "keyboard",
+      "keys",
+      "encoder",
+      "touch"
+    ],
+    "includes": [
+      "<zephyr/input/input.h>"
+    ]
+  },
+  {
+    "id": "networking",
+    "name": "IP Networking (TCP/IP & BSD Sockets)",
+    "category": "Networking",
+    "description": "Complete Zephyr native IP stack supporting IPv4, IPv6, TCP, UDP, BSD sockets API, and loopback.",
+    "kconfig": [
+      "CONFIG_NETWORKING=y",
+      "CONFIG_NET_IPV4=y",
+      "CONFIG_NET_IPV6=n",
+      "CONFIG_NET_TCP=y",
+      "CONFIG_NET_UDP=y",
+      "CONFIG_NET_SOCKETS=y",
+      "CONFIG_NET_SOCKETS_POSIX_NAMES=y",
+      "CONFIG_NET_MAX_CONTEXTS=10"
+    ],
+    "tags": [
+      "ip",
+      "tcp",
+      "udp",
+      "socket",
+      "bsd",
+      "internet"
+    ],
+    "includes": [
+      "<zephyr/net/socket.h>",
+      "<zephyr/net/net_if.h>"
+    ],
+    "mainInit": "/* Network interface auto-initialized */\n"
+  },
+  {
+    "id": "wifi",
+    "name": "Wi-Fi Management",
+    "category": "Networking",
+    "description": "Wi-Fi station and AP management API with connection callbacks and credential storage.",
+    "dependencies": [
+      "networking"
+    ],
+    "kconfig": [
+      "CONFIG_NETWORKING=y",
+      "CONFIG_WIFI=y",
+      "CONFIG_NET_L2_WIFI_MGMT=y",
+      "CONFIG_WIFI_NM=y"
+    ],
+    "tags": [
+      "wireless",
+      "wlan",
+      "station",
+      "hotspot",
+      "iot"
+    ],
+    "includes": [
+      "<zephyr/net/wifi_mgmt.h>"
+    ]
+  },
+  {
+    "id": "mqtt",
+    "name": "MQTT IoT Client",
+    "category": "Networking",
+    "description": "Lightweight MQTT v3.1.1 client for publishing telemetry and subscribing to cloud topics.",
+    "dependencies": [
+      "networking"
+    ],
+    "kconfig": [
+      "CONFIG_NETWORKING=y",
+      "CONFIG_MQTT_LIB=y",
+      "CONFIG_NET_SOCKETS=y"
+    ],
+    "tags": [
+      "cloud",
+      "pubsub",
+      "aws",
+      "azure",
+      "telemetry",
+      "broker"
+    ],
+    "includes": [
+      "<zephyr/net/mqtt.h>"
+    ]
+  },
+  {
+    "id": "http",
+    "name": "HTTP Client",
+    "category": "Networking",
+    "description": "HTTP client library for REST APIs, JSON payloads, GET/POST requests, and chunked transfer.",
+    "dependencies": [
+      "networking"
+    ],
+    "kconfig": [
+      "CONFIG_NETWORKING=y",
+      "CONFIG_HTTP_CLIENT=y",
+      "CONFIG_NET_SOCKETS=y"
+    ],
+    "tags": [
+      "web",
+      "rest",
+      "api",
+      "json",
+      "post",
+      "get"
+    ],
+    "includes": [
+      "<zephyr/net/http/client.h>"
+    ]
+  },
+  {
+    "id": "coap",
+    "name": "CoAP (Constrained Application Protocol)",
+    "category": "Networking",
+    "description": "Lightweight binary protocol over UDP for bandwidth-constrained IoT nodes.",
+    "dependencies": [
+      "networking"
+    ],
+    "kconfig": [
+      "CONFIG_NETWORKING=y",
+      "CONFIG_COAP=y",
+      "CONFIG_NET_SOCKETS=y",
+      "CONFIG_NET_UDP=y"
+    ],
+    "tags": [
+      "udp",
+      "lightweight",
+      "iot",
+      "sensor"
+    ],
+    "includes": [
+      "<zephyr/net/coap.h>"
+    ]
+  },
+  {
+    "id": "dns",
+    "name": "DNS Name Resolver",
+    "category": "Networking",
+    "description": "Domain Name System client for resolving hostnames to IP addresses asynchronously.",
+    "dependencies": [
+      "networking"
+    ],
+    "kconfig": [
+      "CONFIG_NETWORKING=y",
+      "CONFIG_DNS_RESOLVER=y",
+      "CONFIG_NET_SOCKETS=y"
+    ],
+    "tags": [
+      "domain",
+      "lookup",
+      "hostname"
+    ],
+    "includes": [
+      "<zephyr/net/dns_resolve.h>"
+    ]
+  },
+  {
+    "id": "sntp",
+    "name": "SNTP (Network Time Protocol)",
+    "category": "Networking",
+    "description": "Network time synchronization protocol for keeping precise real-world timestamps.",
+    "dependencies": [
+      "networking"
+    ],
+    "kconfig": [
+      "CONFIG_NETWORKING=y",
+      "CONFIG_SNTP=y",
+      "CONFIG_NET_SOCKETS=y"
+    ],
+    "tags": [
+      "ntp",
+      "rtc",
+      "clock",
+      "time",
+      "sync"
+    ],
+    "includes": [
+      "<zephyr/net/sntp.h>"
+    ]
+  },
+  {
+    "id": "bluetooth",
+    "name": "Bluetooth Low Energy (Host Stack)",
+    "category": "Bluetooth",
+    "description": "Production-grade BLE host stack with GATT Server/Client, GAP, Advertising, and Pairing.",
+    "kconfig": [
+      "CONFIG_BT=y",
+      "CONFIG_BT_PERIPHERAL=y",
+      "CONFIG_BT_CENTRAL=y",
+      "CONFIG_BT_DEVICE_NAME=\"Zephyr App\"",
+      "CONFIG_BT_GATT_DYNAMIC_DB=y"
+    ],
+    "tags": [
+      "ble",
+      "wireless",
+      "gatt",
+      "advertising",
+      "nordic",
+      "beacon"
+    ],
+    "includes": [
+      "<zephyr/bluetooth/bluetooth.h>",
+      "<zephyr/bluetooth/gatt.h>"
+    ],
+    "mainInit": "int bt_err = bt_enable(NULL);\nif (bt_err) {\n\tprintk(\"Bluetooth init failed (err %d)\\n\", bt_err);\n} else {\n\tprintk(\"Bluetooth initialized successfully\\n\");\n}\n"
+  },
+  {
+    "id": "bt_mesh",
+    "name": "Bluetooth Mesh",
+    "category": "Bluetooth",
+    "description": "Bluetooth Mesh networking profile for large-scale many-to-many device networks (lighting, sensors).",
+    "dependencies": [
+      "bluetooth"
+    ],
+    "kconfig": [
+      "CONFIG_BT=y",
+      "CONFIG_BT_MESH=y",
+      "CONFIG_BT_MESH_PB_ADV=y",
+      "CONFIG_BT_MESH_CFG_SRV=y"
+    ],
+    "tags": [
+      "mesh",
+      "flooding",
+      "smart home",
+      "lighting"
+    ],
+    "includes": [
+      "<zephyr/bluetooth/mesh.h>"
+    ]
+  },
+  {
+    "id": "bt_nus",
+    "name": "Bluetooth Nordic UART Service (NUS)",
+    "category": "Bluetooth",
+    "description": "Virtual wireless serial port service over BLE GATT for smartphone terminal communication.",
+    "dependencies": [
+      "bluetooth"
+    ],
+    "kconfig": [
+      "CONFIG_BT=y",
+      "CONFIG_BT_PERIPHERAL=y",
+      "CONFIG_BT_NUS=y"
+    ],
+    "tags": [
+      "serial",
+      "terminal",
+      "ble uart",
+      "smartphone"
+    ],
+    "includes": [
+      "<zephyr/bluetooth/services/nus.h>"
+    ]
+  },
+  {
+    "id": "usb_device",
+    "name": "USB Device Stack",
+    "category": "USB",
+    "description": "USB 2.0 full-speed and high-speed device controller stack.",
+    "kconfig": [
+      "CONFIG_USB_DEVICE_STACK=y",
+      "CONFIG_USB_DEVICE_PRODUCT=\"Zephyr USB Device\""
+    ],
+    "tags": [
+      "usb",
+      "peripheral",
+      "host",
+      "device"
+    ],
+    "includes": [
+      "<zephyr/usb/usb_device.h>"
+    ],
+    "mainInit": "if (usb_enable(NULL)) {\n\tprintk(\"Failed to enable USB\\n\");\n}\n"
+  },
+  {
+    "id": "usb_cdc_acm",
+    "name": "USB CDC ACM (Virtual COM Port)",
+    "category": "USB",
+    "description": "USB Communications Device Class ACM emulation for plug-and-play USB serial terminal.",
+    "dependencies": [
+      "usb_device"
+    ],
+    "kconfig": [
+      "CONFIG_USB_DEVICE_STACK=y",
+      "CONFIG_SERIAL=y",
+      "CONFIG_UART_LINE_CTRL=y",
+      "CONFIG_USB_CDC_ACM=y"
+    ],
+    "tags": [
+      "serial",
+      "vcom",
+      "terminal",
+      "uart",
+      "cdc"
+    ],
+    "includes": [
+      "<zephyr/usb/usb_device.h>",
+      "<zephyr/drivers/uart.h>"
+    ]
+  },
+  {
+    "id": "usb_hid",
+    "name": "USB HID (Keyboard/Mouse)",
+    "category": "USB",
+    "description": "USB Human Interface Device class for keyboards, mice, gamepads, and custom HID reports.",
+    "dependencies": [
+      "usb_device"
+    ],
+    "kconfig": [
+      "CONFIG_USB_DEVICE_STACK=y",
+      "CONFIG_USB_DEVICE_HID=y"
+    ],
+    "tags": [
+      "mouse",
+      "keyboard",
+      "input",
+      "gamepad"
+    ],
+    "includes": [
+      "<zephyr/usb/class/usb_hid.h>"
+    ]
+  },
+  {
+    "id": "flash",
+    "name": "Flash Memory & Partitions",
+    "category": "Storage",
+    "description": "Internal and external flash memory driver, flash partitions map, and page layout API.",
+    "kconfig": [
+      "CONFIG_FLASH=y",
+      "CONFIG_FLASH_MAP=y",
+      "CONFIG_FLASH_PAGE_LAYOUT=y"
+    ],
+    "tags": [
+      "nor",
+      "spi flash",
+      "qspi",
+      "partitions"
+    ],
+    "includes": [
+      "<zephyr/drivers/flash.h>",
+      "<zephyr/storage/flash_map.h>"
+    ]
+  },
+  {
+    "id": "nvs",
+    "name": "NVS (Non-Volatile Storage)",
+    "category": "Storage",
+    "description": "Flash-backed key-value store with wear leveling for small config variables, IDs, and states.",
+    "dependencies": [
+      "flash"
+    ],
+    "kconfig": [
+      "CONFIG_FLASH=y",
+      "CONFIG_NVS=y",
+      "CONFIG_FLASH_MAP=y"
+    ],
+    "tags": [
+      "eeprom",
+      "keyvalue",
+      "nvram",
+      "parameters"
+    ],
+    "includes": [
+      "<zephyr/fs/nvs.h>"
+    ]
+  },
+  {
+    "id": "littlefs",
+    "name": "LittleFS Filesystem",
+    "category": "Storage",
+    "description": "Fail-safe embedded filesystem designed for microcontrollers with power-loss resilience and wear leveling.",
+    "dependencies": [
+      "flash"
+    ],
+    "westModules": [
+      "littlefs"
+    ],
+    "kconfig": [
+      "CONFIG_FILE_SYSTEM=y",
+      "CONFIG_FILE_SYSTEM_LITTLEFS=y",
+      "CONFIG_FLASH=y",
+      "CONFIG_FLASH_MAP=y"
+    ],
+    "tags": [
+      "filesystem",
+      "files",
+      "wear leveling",
+      "power safe"
+    ],
+    "includes": [
+      "<zephyr/fs/fs.h>"
+    ]
+  },
+  {
+    "id": "fatfs",
+    "name": "FAT Filesystem (SD Card / USB)",
+    "category": "Storage",
+    "description": "FAT12/16/32 and exFAT filesystem support for SD/MMC cards and USB Mass Storage drives.",
+    "westModules": [
+      "fatfs"
+    ],
+    "kconfig": [
+      "CONFIG_FILE_SYSTEM=y",
+      "CONFIG_FAT_FILESYSTEM_ELM=y",
+      "CONFIG_DISK_ACCESS=y"
+    ],
+    "tags": [
+      "sdcard",
+      "microsd",
+      "fat32",
+      "usb drive"
+    ],
+    "includes": [
+      "<zephyr/fs/fs.h>"
+    ]
+  },
+  {
+    "id": "settings",
+    "name": "Settings Subsystem",
+    "category": "Storage",
+    "description": "Centralized key-value storage engine for subsystems (e.g. BLE keys, Wi-Fi passwords, user calibration).",
+    "kconfig": [
+      "CONFIG_SETTINGS=y"
+    ],
+    "tags": [
+      "preferences",
+      "configuration",
+      "credentials"
+    ],
+    "includes": [
+      "<zephyr/settings/settings.h>"
+    ],
+    "mainInit": "settings_subsys_init();\n"
+  },
+  {
+    "id": "crypto",
+    "name": "mbedTLS Cryptography",
+    "category": "Security",
+    "description": "Cryptographic primitive library for AES, SHA-256, RSA, ECC, HMAC, and random number generation.",
+    "westModules": [
+      "mbedtls"
+    ],
+    "kconfig": [
+      "CONFIG_MBEDTLS=y",
+      "CONFIG_MBEDTLS_BUILTIN=y"
+    ],
+    "tags": [
+      "aes",
+      "sha256",
+      "hash",
+      "ecc",
+      "encryption"
+    ],
+    "includes": [
+      "<mbedtls/sha256.h>",
+      "<mbedtls/aes.h>"
+    ]
+  },
+  {
+    "id": "tls",
+    "name": "TLS Sockets (HTTPS / MQTTS)",
+    "category": "Security",
+    "description": "Transport Layer Security encrypted BSD sockets via mbedTLS for secure web and cloud APIs.",
+    "dependencies": [
+      "networking",
+      "crypto"
+    ],
+    "westModules": [
+      "mbedtls"
+    ],
+    "kconfig": [
+      "CONFIG_NETWORKING=y",
+      "CONFIG_NET_SOCKETS=y",
+      "CONFIG_NET_SOCKETS_SOCKOPT_TLS=y",
+      "CONFIG_MBEDTLS=y",
+      "CONFIG_MBEDTLS_BUILTIN=y"
+    ],
+    "tags": [
+      "ssl",
+      "tls",
+      "https",
+      "secure socket",
+      "certificates"
+    ],
+    "includes": [
+      "<zephyr/net/tls_credentials.h>"
+    ]
+  },
+  {
+    "id": "mcuboot",
+    "name": "MCUboot Bootloader Integration",
+    "category": "Security",
+    "description": "Dual-bank secure bootloader with cryptographic signature verification and image rollback protection.",
+    "westModules": [
+      "mcuboot"
+    ],
+    "kconfig": [
+      "CONFIG_BOOTLOADER_MCUBOOT=y"
+    ],
+    "tags": [
+      "ota",
+      "firmware update",
+      "secure boot",
+      "dual bank"
+    ],
+    "includes": [
+      "<zephyr/dfu/mcuboot.h>"
+    ]
+  },
+  {
+    "id": "dfu",
+    "name": "Device Firmware Upgrade (DFU)",
+    "category": "Security",
+    "description": "Streamed flash writing and image manager for over-the-air (OTA) or USB/serial firmware updates.",
+    "dependencies": [
+      "flash",
+      "mcuboot"
+    ],
+    "westModules": [
+      "mcuboot"
+    ],
+    "kconfig": [
+      "CONFIG_IMG_MANAGER=y",
+      "CONFIG_STREAM_FLASH=y",
+      "CONFIG_FLASH_MAP=y"
+    ],
+    "tags": [
+      "fota",
+      "ota",
+      "update",
+      "image manager"
+    ],
+    "includes": [
+      "<zephyr/dfu/flash_img.h>"
+    ]
+  },
+  {
+    "id": "pm",
+    "name": "Power Management & Sleep",
+    "category": "System",
+    "description": "System-wide and peripheral power management for low-power sleep, standby, and tickless idle modes.",
+    "kconfig": [
+      "CONFIG_PM=y",
+      "CONFIG_PM_DEVICE=y"
+    ],
+    "tags": [
+      "low power",
+      "sleep",
+      "battery",
+      "standby",
+      "deep sleep"
+    ],
+    "includes": [
+      "<zephyr/pm/pm.h>",
+      "<zephyr/pm/device.h>"
+    ]
+  },
+  {
+    "id": "zbus",
+    "name": "Zbus (Publish/Subscribe Bus)",
+    "category": "System",
+    "description": "Lightweight thread-safe message bus for decoupled multi-threaded event communication.",
+    "kconfig": [
+      "CONFIG_ZBUS=y"
+    ],
+    "tags": [
+      "pubsub",
+      "ipc",
+      "messages",
+      "event driven"
+    ],
+    "includes": [
+      "<zephyr/zbus/zbus.h>"
+    ]
+  },
+  {
+    "id": "rtio",
+    "name": "RTIO (Real-Time I/O)",
+    "category": "System",
+    "description": "Asynchronous event-driven I/O subsystem with lock-free ring buffers for high-rate sensor streams.",
+    "kconfig": [
+      "CONFIG_RTIO=y"
+    ],
+    "tags": [
+      "async",
+      "dma",
+      "ring buffer",
+      "streaming"
+    ],
+    "includes": [
+      "<zephyr/rtio/rtio.h>"
+    ]
+  },
+  {
+    "id": "thread_analyzer",
+    "name": "Thread Analyzer & Stack Monitor",
+    "category": "System",
+    "description": "Diagnostic tool that periodic prints thread stack high water marks and CPU utilization.",
+    "kconfig": [
+      "CONFIG_THREAD_ANALYZER=y",
+      "CONFIG_THREAD_NAME=y",
+      "CONFIG_THREAD_ANALYZER_USE_PRINTK=y"
+    ],
+    "tags": [
+      "profiling",
+      "stack",
+      "overflow",
+      "cpu",
+      "debug"
+    ],
+    "includes": [
+      "<zephyr/debug/thread_analyzer.h>"
+    ]
+  },
+  {
+    "id": "picolibc",
+    "name": "Picolibc (Optimized C Library)",
+    "category": "System",
+    "description": "Compact, fast, modern C library optimized for embedded microcontrollers.",
+    "kconfig": [
+      "CONFIG_PICOLIBC=y"
+    ],
+    "tags": [
+      "libc",
+      "stdlib",
+      "math",
+      "embedded"
+    ],
+    "includes": [
+      "<stdio.h>",
+      "<stdlib.h>",
+      "<string.h>"
+    ]
+  },
+  {
+    "id": "lvgl",
+    "name": "LVGL (Light and Versatile Graphics)",
+    "category": "Libraries",
+    "description": "Modern embedded GUI graphics library supporting widgets, animations, styles, touch, and fonts.",
+    "dependencies": [
+      "display"
+    ],
+    "westModules": [
+      "lvgl"
+    ],
+    "kconfig": [
+      "CONFIG_LVGL=y",
+      "CONFIG_DISPLAY=y",
+      "CONFIG_LV_Z_MEM_POOL_SIZE=16384"
+    ],
+    "tags": [
+      "gui",
+      "widgets",
+      "touchscreen",
+      "ui",
+      "graphics"
+    ],
+    "includes": [
+      "<lvgl.h>"
+    ]
+  },
+  {
+    "id": "cmsis_dsp",
+    "name": "CMSIS-DSP (Digital Signal Processing)",
+    "category": "Libraries",
+    "description": "ARM optimized digital signal processing library: FFT, matrix math, filters, vector math, stats.",
+    "westModules": [
+      "cmsis",
+      "cmsis-dsp"
+    ],
+    "kconfig": [
+      "CONFIG_CMSIS_DSP=y"
+    ],
+    "tags": [
+      "fft",
+      "filters",
+      "math",
+      "dsp",
+      "audio"
+    ],
+    "includes": [
+      "<arm_math.h>"
+    ]
+  },
+  {
+    "id": "cjson",
+    "name": "cJSON Library",
+    "category": "Libraries",
+    "description": "Ultralightweight JSON parser and generator in pure ANSI C.",
+    "kconfig": [
+      "CONFIG_CJSON_LIB=y"
+    ],
+    "tags": [
+      "json",
+      "parser",
+      "serialization",
+      "rest"
+    ],
+    "includes": [
+      "<cJSON.h>"
+    ]
+  },
+  {
+    "id": "nanopb",
+    "name": "NanoPB (Protocol Buffers)",
+    "category": "Libraries",
+    "description": "Small-footprint Google Protocol Buffers implementation for 32-bit microcontrollers.",
+    "westModules": [
+      "nanopb"
+    ],
+    "kconfig": [
+      "CONFIG_NANOPB=y"
+    ],
+    "tags": [
+      "protobuf",
+      "binary",
+      "rpc",
+      "serialization"
+    ],
+    "includes": [
+      "<pb_encode.h>",
+      "<pb_decode.h>"
+    ]
+  }
+]
