@@ -85,32 +85,17 @@ npm run preview
 
 Because Zephyr-Startr runs 100% client-side without any server requirement, it can be deployed directly to GitHub Pages:
 
-1. In `vite.config.ts`, `base: './'` is configured to support root domains and repository subpaths.
-2. Build the project:
-   ```bash
-   npm run build
-   ```
-3. Deploy the `dist/` directory to GitHub Pages using [gh-pages](https://www.npmjs.com/package/gh-pages) or a GitHub Actions workflow:
-   ```yaml
-   name: Deploy to GitHub Pages
-   on:
-     push:
-       branches: [main]
-   jobs:
-     deploy:
-       runs-on: ubuntu-latest
-       steps:
-         - uses: actions/checkout@v4
-         - uses: actions/setup-node@v4
-           with:
-             node-version: 22
-         - run: npm install
-         - run: npm run build
-         - uses: peaceiris/actions-gh-pages@v3
-           with:
-             github_token: ${{ secrets.GITHUB_TOKEN }}
-             publish_dir: ./dist
-   ```
+1. **Configure Repository Settings on GitHub**:
+   - Navigate to your repository on GitHub.
+   - Go to **Settings** → **Pages**.
+   - Under **Build and deployment** → **Source**, select **GitHub Actions**.
+
+2. **Automated CI/CD Workflow**:
+   - The included workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) automatically triggers on push to `main` or `master`.
+   - It runs `npm ci`, verifies code quality with `npm run lint`, builds the production bundle with `npm run build`, and publishes `dist/` directly to GitHub Pages.
+
+3. **Subpath & Custom Domain Compatibility**:
+   - In `vite.config.ts`, `base: './'` is configured to resolve all assets relatively, ensuring out-of-the-box compatibility with repository subpaths (`https://<username>.github.io/<repo>/`) as well as custom apex/subdomains.
 
 ---
 
