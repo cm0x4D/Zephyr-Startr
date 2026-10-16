@@ -1,8 +1,8 @@
-# Zephyr Initializer
+# Zephyr-Startr
 
 > A fast web-based project generator for [Zephyr RTOS](https://www.zephyrproject.org/).
 
-Zephyr Initializer generates minimal, ready-to-compile **West workspace** archives directly in your browser. It configures West manifests, CMake build scripts, Kconfig options, and starter C application source code tailored to your exact hardware board and selected subsystems.
+Zephyr-Startr generates minimal, ready-to-compile **West workspace** archives directly in your browser. It configures West manifests, CMake build scripts, Kconfig options, and starter C application source code tailored to your exact hardware board and selected subsystems.
 
 No backend server is required — everything runs entirely client-side and can be hosted statically on **GitHub Pages**.
 
@@ -11,7 +11,7 @@ No backend server is required — everything runs entirely client-side and can b
 ## Key Features
 
 * **Zero-Bloat West Manifests (`name-allowlist`)**:
-  Standard Zephyr West manifests often clone dozens of vendor HALs and third-party modules totaling gigabytes of download. Zephyr Initializer generates an allowlisted `west.yml` that only clones the specific HAL for your board (e.g. `hal_nordic`, `hal_stm32`, `hal_espressif`, `hal_rpi_pico`) and only the specific modules you enable (e.g. `mbedtls`, `littlefs`, `lvgl`).
+  Standard Zephyr West manifests often clone dozens of vendor HALs and third-party modules totaling gigabytes of download. Zephyr-Startr generates an allowlisted `west.yml` that only clones the specific HAL for your board (e.g. `hal_nordic`, `hal_stm32`, `hal_espressif`, `hal_rpi_pico`) and only the specific modules you enable (e.g. `mbedtls`, `littlefs`, `lvgl`).
 * **1,750+ Verified Hardware Boards**:
   Search and filter across all official Zephyr dev boards and targets (ARM, RISC-V, Xtensa, x86, POSIX Simulator) with instant search, vendor chips, and architecture badges.
 * **Online Sync with Resilient Offline Fallback**:
@@ -29,7 +29,7 @@ No backend server is required — everything runs entirely client-side and can b
 ## Project Structure
 
 ```
-zephyr-initializer/
+zephyr-startr/
 ├── public/
 │   └── data/
 │       ├── boards.json       # 1,755 verified boards dataset
@@ -83,7 +83,7 @@ npm run preview
 
 ## Deploying to GitHub Pages
 
-Because Zephyr Initializer runs 100% client-side without any server requirement, it can be deployed directly to GitHub Pages:
+Because Zephyr-Startr runs 100% client-side without any server requirement, it can be deployed directly to GitHub Pages:
 
 1. In `vite.config.ts`, `base: './'` is configured to support root domains and repository subpaths.
 2. Build the project:

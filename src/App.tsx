@@ -301,7 +301,7 @@ export const App: React.FC = () => {
               <Terminal className="icon-sm text-accent" />
             </div>
             <div className="banner-text-col">
-              <strong>Zero-Bloat West Manifests:</strong> Zephyr Initializer configures West manifest{' '}
+              <strong>Zero-Bloat West Manifests:</strong> Zephyr-Startr configures West manifest{' '}
               <code>name-allowlist</code> so your workspace only clones the exact HAL and modules required for{' '}
               <span className="text-light font-bold">
                 {currentBoard ? currentBoard.name : config.boardId}

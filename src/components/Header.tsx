@@ -30,7 +30,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
           <div className="brand-text">
             <div className="brand-title-row">
-              <h1 className="brand-title">Zephyr Initializer</h1>
+              <h1 className="brand-title">Zephyr-Startr</h1>
               <span className="brand-tag">Project Generator for Zephyr RTOS</span>
             </div>
             <p className="brand-subtitle">
