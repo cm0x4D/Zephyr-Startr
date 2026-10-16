@@ -38,6 +38,10 @@ export const ActionBar: React.FC<ActionBarProps> = ({
             <span className="summary-version">{config.zephyrVersion}</span>
             <span className="summary-dot">•</span>
             <span className="summary-modules">{selectedModulesCount} modules</span>
+            <span className="summary-dot">•</span>
+            <span className="summary-type">
+              {config.workspaceType === 'application' ? 'App only' : 'Workspace'}
+            </span>
           </div>
         </div>
 

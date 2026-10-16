@@ -1,5 +1,5 @@
 import React from 'react';
-import { Cpu, Layers, Check, ChevronDown } from 'lucide-react';
+import { Cpu, Layers, Check, ChevronDown, Package, FileCode2, HelpCircle } from 'lucide-react';
 import type { Board, ProjectConfig, ProjectTemplate, Release } from '../types';
 
 interface ProjectSettingsProps {
@@ -117,6 +117,90 @@ export const ProjectSettings: React.FC<ProjectSettingsProps> = ({
             <span className="form-hint">
               Upstream Zephyr git revision checked out into workspace during <code>west update</code>
             </span>
+          </div>
+        </div>
+
+        {/* Workspace Mode / Packaging */}
+        <div className="form-group full-width">
+          <div className="label-with-hint">
+            <label className="form-label">Packaging & Workspace Structure</label>
+            <span className="form-hint-badge">Choose how your project is bundled</span>
+          </div>
+
+          <div className="workspace-toggle-grid">
+            <button
+              type="button"
+              className={`workspace-card ${config.workspaceType === 'standalone' ? 'selected' : ''}`}
+              onClick={() => onChangeConfig({ workspaceType: 'standalone' })}
+            >
+              <div className="workspace-card-header">
+                <div className="workspace-icon-box">
+                  <Package className="icon-sm text-accent" />
+                </div>
+                <div className="workspace-title-box">
+                  <span className="workspace-title">Dedicated Workspace</span>
+                  <span className="workspace-badge recommended">New Workspace</span>
+                </div>
+                {config.workspaceType === 'standalone' && <Check className="icon-xs text-accent check-icon" />}
+              </div>
+              <p className="workspace-desc">
+                Contains a complete standalone Zephyr workspace structure with an allowlisted <code>app/west.yml</code> manifest, <code>app/</code> source folder, <code>.gitignore</code>, and workspace initialization guide.
+              </p>
+              <div className="workspace-perks">
+                <span className="perk-tag">Independent repository</span>
+                <span className="perk-tag">Minimal clone allowlist</span>
+                <span className="perk-tag">.venv at workspace root</span>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              className={`workspace-card ${config.workspaceType === 'application' ? 'selected' : ''}`}
+              onClick={() => onChangeConfig({ workspaceType: 'application' })}
+            >
+              <div className="workspace-card-header">
+                <div className="workspace-icon-box">
+                  <FileCode2 className="icon-sm text-accent" />
+                </div>
+                <div className="workspace-title-box">
+                  <span className="workspace-title">Application Only</span>
+                  <span className="workspace-badge existing">Existing Workspace</span>
+                </div>
+                {config.workspaceType === 'application' && <Check className="icon-xs text-accent check-icon" />}
+              </div>
+              <p className="workspace-desc">
+                Generates only application files (<code>CMakeLists.txt</code>, <code>prj.conf</code>, <code>src/main.c</code>, <code>sample.yaml</code>) to drop directly into an already existing Zephyr workspace.
+              </p>
+              <div className="workspace-perks">
+                <span className="perk-tag">No duplicate West setup</span>
+                <span className="perk-tag">Zero extra download</span>
+                <span className="perk-tag">Uses existing .venv</span>
+              </div>
+            </button>
+          </div>
+
+          <div className="workspace-explanation-callout">
+            <HelpCircle className="icon-sm text-accent callout-icon" />
+            <div className="callout-content">
+              <strong className="callout-heading">Adding to an existing workspace vs. creating a new one:</strong>
+              <div className="callout-items">
+                <div className="callout-item">
+                  <span className="callout-bullet">•</span>
+                  <span>
+                    <strong>Dedicated Workspace (Standalone):</strong> Choose this when starting a brand new project. West will initialize an isolated workspace directory, set up <code>.venv</code> at the root, and clone only the specific Zephyr HAL and modules you enabled without touching other projects.
+                  </span>
+                </div>
+                <div className="callout-item">
+                  <span className="callout-bullet">•</span>
+                  <span>
+                    <strong>Application Only (Existing Workspace):</strong> Choose this if you already have Zephyr installed and working on your machine (e.g. in <code>~/zephyrproject</code>). You simply extract this application folder into your workspace and compile immediately using your existing workspace's <code>.venv</code> without downloading another copy of the OS.
+                  </span>
+                </div>
+              </div>
+              <div className="callout-note">
+                <strong>Python Virtual Environment:</strong> In both options, the virtual environment is the <code>.venv</code> folder located directly at the root of the Zephyr workspace folder.
+              </div>
+            </div>
           </div>
         </div>
 

@@ -43,6 +43,8 @@ export interface ProjectTemplate {
   recommendedModules: string[];
 }
 
+export type WorkspaceType = 'standalone' | 'application';
+
 export interface ProjectConfig {
   name: string;
   zephyrVersion: string;
@@ -50,6 +52,7 @@ export interface ProjectConfig {
   templateId: string;
   selectedModuleIds: string[];
   customKconfig: string[];
+  workspaceType: WorkspaceType;
 }
 
 export interface GeneratedFile {

@@ -354,192 +354,6 @@ SHELL_CMD_REGISTER(app, &sub_app, "Application commands", NULL);
   return code;
 }
 
-export function generateReadmeMd(config: ProjectConfig, modules: Module[], board?: Board): string {
-  const boardId = board ? board.id : config.boardId;
-  const boardName = board ? board.name : config.boardId;
-  const vendor = board ? board.vendor : 'Unknown';
-  const arch = board ? board.arch : 'arm';
-
-  let modsTable = '| Module | Category | Required West Projects | Description |\n|---|---|---|---|\n';
-  if (modules.length > 0) {
-    for (const m of modules) {
-      const west = m.westModules && m.westModules.length > 0 ? `\`${m.westModules.join(', ')}\`` : '*(none)*';
-      modsTable += `| **${m.name}** | \`${m.category}\` | ${west} | ${m.description} |\n`;
-    }
-  } else {
-    modsTable += '| *(none)* | `Core` | *(none)* | Minimal application |\n';
-  }
-
-  return `# ${config.name}
-
-Zephyr RTOS application configured for **${boardName}** (\`${boardId}\`).
-
-| Target Board | Architecture | Vendor | Zephyr Revision |
-|:---|:---|:---|:---|
-| **${boardName}** (\`${boardId}\`) | \`${arch.toUpperCase()}\` | ${vendor} | \`${config.zephyrVersion || 'main'}\` |
-
-> Generated on the fly by **[Zephyr Initializer](https://start.zephyrproject.io)** — Fast project generator for Zephyr RTOS.
-
----
-
-## 🚀 Quick Start Guide
-
-### 1. Host System Preparation (Prerequisites)
-
-Follow the official [Zephyr Getting Started Guide](https://docs.zephyrproject.org/latest/develop/getting_started/index.html) to prepare your host system.
-
-#### 🍎 macOS (Apple Silicon & Intel)
-1. Install [Homebrew](https://brew.sh/) if not already installed.
-2. Install host tools and build dependencies via Homebrew:
-   \`\`\`bash
-   brew install cmake ninja gperf python3 ccache qemu dtc wget libmagic
-   \`\`\`
-3. Install the Zephyr SDK:
-   \`\`\`bash
-   # Using Homebrew:
-   brew install zephyr-sdk
-   \`\`\`
-   *(Alternatively, download and run the setup script from the [Zephyr SDK Releases](https://github.com/zephyrproject-rtos/sdk-ng/releases).)*
-
-#### 🐧 Ubuntu / Debian Linux
-1. Update package lists and install host build tools:
-   \`\`\`bash
-   sudo apt update && sudo apt install --no-install-recommends -y \\
-     git cmake ninja-build gperf \\
-     ccache dfu-util device-tree-compiler wget \\
-     python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file \\
-     make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
-   \`\`\`
-2. Download and install the [Zephyr SDK](https://docs.zephyrproject.org/latest/develop/getting_started/index.html#install-the-zephyr-sdk).
-
-#### 🪟 Windows
-Use Windows Subsystem for Linux (WSL2 Ubuntu) following the Linux instructions above, or refer to the native [Zephyr Windows Guide](https://docs.zephyrproject.org/latest/develop/getting_started/index.html) using Chocolatey.
-
----
-
-### 2. Python Virtual Environment & West Setup
-
-It is strongly recommended to use a dedicated Python virtual environment to isolate Zephyr and West dependencies from your operating system packages:
-
-\`\`\`bash
-# 1. Create a dedicated virtual environment
-python3 -m venv ~/.zephyr-venv
-
-# 2. Activate the virtual environment
-# On macOS / Linux:
-source ~/.zephyr-venv/bin/activate
-# On Windows (PowerShell):
-# ~/.zephyr-venv\\Scripts\\Activate.ps1
-
-# 3. Upgrade pip and install West inside the virtual environment
-pip install --upgrade pip
-pip install west
-\`\`\`
-
----
-
-### 3. Initialize the West Workspace
-
-Create a workspace directory and initialize West using this extracted project folder as the manifest repository:
-
-\`\`\`bash
-# 1. Create and navigate to your workspace root directory
-mkdir -p ~/zephyr-workspace
-cd ~/zephyr-workspace
-
-# 2. Extract or copy this application folder into:
-# ~/zephyr-workspace/${config.name}
-
-# 3. Initialize West using this project as manifest repository
-west init -l ${config.name}
-
-# 4. Clone Zephyr repository and only the strictly required HAL / modules
-west update
-
-# 5. Export Zephyr CMake package
-west zephyr-export
-
-# 6. Install Zephyr Python dependencies inside your active virtual environment
-pip install -r zephyr/scripts/requirements.txt
-\`\`\`
-
-> **Note on download size:** Zephyr Initializer configures West's \`name-allowlist\` to clone **only** the required HAL for ${vendor} and the modules you selected. No multi-gigabyte bloat or unneeded vendor repositories are downloaded.
-
----
-
-### 4. Build the Application
-
-Ensure your Python virtual environment is active (\`source ~/.zephyr-venv/bin/activate\`), navigate into the application directory, and run \`west build\`:
-
-\`\`\`bash
-cd ${config.name}
-
-# Build for ${boardName}
-west build -b ${boardId}
-
-# Tip: Run a pristine build if rebuilding or switching configurations:
-west build -p auto -b ${boardId}
-\`\`\`
-
----
-
-### 5. Flash to Hardware
-
-Connect your board to your computer via USB or debug probe, then execute:
-
-\`\`\`bash
-west flash
-\`\`\`
-
-West automatically detects and invokes the appropriate flashing runner configured for \`${boardId}\` (e.g. OpenOCD, J-Link, pyOCD, esptool, dfu-util, or UF2).
-
----
-
-### 6. Serial Console Monitoring
-
-Connect a serial terminal emulator at **115200 baud** to view logs and diagnostic printk output:
-
-#### macOS:
-\`\`\`bash
-# List connected USB serial ports:
-ls /dev/cu.*
-
-# Connect using screen (or picocom / miniterm):
-screen /dev/cu.usbmodem* 115200
-# (To exit screen: press Ctrl+A, then press k, then press y)
-\`\`\`
-
-#### Linux:
-\`\`\`bash
-# Using picocom:
-picocom -b 115200 /dev/ttyACM0
-# Or using PySerial miniterm:
-python3 -m serial.tools.miniterm /dev/ttyACM0 115200
-\`\`\`
-
----
-
-## 🧩 Enabled Modules & Subsystems
-
-${modsTable}
-
----
-
-## 📁 Project Structure
-
-\`\`\`
-${config.name}/
-├── west.yml         # West manifest with minimized name-allowlist
-├── CMakeLists.txt   # CMake application configuration
-├── prj.conf         # Kconfig project settings
-├── sample.yaml      # Twister automated test metadata
-├── README.md        # This getting started guide
-└── src/
-    └── main.c       # Application entry point with initialized subsystems
-\`\`\`
-`;
-}
-
 export function generateSampleYaml(config: ProjectConfig, board?: Board): string {
   const boardId = board ? board.id : config.boardId;
   return `sample:
@@ -567,42 +381,361 @@ compile_commands.json
 *.hex
 *.uf2
 
-# IDE and Python files
-.vscode/
-.idea/
+# Zephyr West dependencies (managed by west update)
+zephyr/
+modules/
+tools/
+bootloader/
+
+# Python virtual environment (at workspace root)
 .venv/
 __pycache__/
+
+# IDE & Editor artifacts
+.vscode/
+.idea/
 *.swp
 *.bak
 `;
 }
 
+export function generateReadmeMd(config: ProjectConfig, modules: Module[], board?: Board): string {
+  const boardName = board ? board.name : config.boardId;
+  const boardId = board ? board.id : config.boardId;
+  const vendor = board ? board.vendor : 'Unknown';
+  const arch = board ? board.arch : 'arm';
+  const isStandalone = config.workspaceType !== 'application';
+
+  let modsTable = '| Module | Category | Required West Projects | Description |\n|---|---|---|---|\n';
+  if (modules.length > 0) {
+    for (const m of modules) {
+      const west = m.westModules && m.westModules.length > 0 ? `\`${m.westModules.join(', ')}\`` : '*(none)*';
+      modsTable += `| **${m.name}** | \`${m.category}\` | ${west} | ${m.description} |\n`;
+    }
+  } else {
+    modsTable += '| *(none)* | `Core` | *(none)* | Minimal application |\n';
+  }
+
+  if (isStandalone) {
+    return `# ${config.name}
+
+Zephyr RTOS dedicated workspace configured for **${boardName}** (\`${boardId}\`).
+
+| Target Board | Architecture | Vendor | Zephyr Revision | Packaging |
+|:---|:---|:---|:---|:---|
+| **${boardName}** (\`${boardId}\`) | \`${arch.toUpperCase()}\` | ${vendor} | \`${config.zephyrVersion || 'main'}\` | **Dedicated Workspace** |
+
+> Generated on the fly by **[Zephyr Initializer](https://start.zephyrproject.io)** — Fast project generator for Zephyr RTOS.
+
+---
+
+## Quick Start Guide
+
+This project is packaged as a **dedicated Zephyr workspace**. It contains a local application repository (\`app/\`) with its own allowlisted West manifest (\`app/west.yml\`).
+
+### 1. Host System Preparation (Prerequisites)
+
+Follow the official [Zephyr Getting Started Guide](https://docs.zephyrproject.org/latest/develop/getting_started/index.html) to prepare your host system.
+
+#### macOS (Apple Silicon & Intel)
+1. Install [Homebrew](https://brew.sh/) if not already installed.
+2. Install host tools and build dependencies via Homebrew:
+   \`\`\`bash
+   brew install cmake ninja gperf python3 ccache qemu dtc wget libmagic
+   \`\`\`
+3. Install the Zephyr SDK:
+   \`\`\`bash
+   brew install zephyr-sdk
+   \`\`\`
+   *(Alternatively, download and run the setup script from the [Zephyr SDK Releases](https://github.com/zephyrproject-rtos/sdk-ng/releases).)*
+
+#### Ubuntu / Debian Linux
+1. Update package lists and install host build tools:
+   \`\`\`bash
+   sudo apt update && sudo apt install --no-install-recommends -y \\
+     git cmake ninja-build gperf \\
+     ccache dfu-util device-tree-compiler wget \\
+     python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file \\
+     make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
+   \`\`\`
+2. Download and install the [Zephyr SDK](https://docs.zephyrproject.org/latest/develop/getting_started/index.html#install-the-zephyr-sdk).
+
+#### Windows
+Use Windows Subsystem for Linux (WSL2 Ubuntu) following the Linux instructions above, or refer to the native [Zephyr Windows Guide](https://docs.zephyrproject.org/latest/develop/getting_started/index.html) using Chocolatey.
+
+---
+
+### 2. Python Virtual Environment Setup
+
+Set up a Python virtual environment in the \`.venv\` folder located directly at the root of this Zephyr workspace:
+
+\`\`\`bash
+# 1. Navigate to the extracted workspace folder:
+cd ${config.name}
+
+# 2. Create the .venv folder directly at the workspace root:
+python3 -m venv .venv
+
+# 3. Activate the virtual environment:
+# On macOS / Linux:
+source .venv/bin/activate
+# On Windows (PowerShell):
+.venv\\Scripts\\Activate.ps1
+# On Windows (cmd.exe):
+.venv\\Scripts\\activate.bat
+
+# 4. Upgrade pip and install West inside the virtual environment:
+pip install --upgrade pip
+pip install west
+\`\`\`
+
+---
+
+### 3. Initialize the West Workspace
+
+With your virtual environment active (\`source .venv/bin/activate\`), initialize West using the local \`app\` directory as the manifest repository:
+
+\`\`\`bash
+# 1. Initialize West pointing to local app/ manifest:
+west init -l app
+
+# 2. Clone Zephyr repository and strictly required HAL / modules:
+west update
+
+# 3. Export Zephyr CMake package:
+west zephyr-export
+
+# 4. Install Zephyr Python requirements into .venv:
+pip install -r zephyr/scripts/requirements.txt
+\`\`\`
+
+> **Note on download size:** Zephyr Initializer configures West's \`name-allowlist\` to clone **only** the required HAL for ${vendor} and the modules you selected. No multi-gigabyte bloat or unneeded vendor repositories are downloaded.
+
+---
+
+### 4. Build the Application
+
+Ensure your Python virtual environment is active (\`source .venv/bin/activate\`), then compile the application from the workspace root:
+
+\`\`\`bash
+# Build for ${boardName}:
+west build -b ${boardId} app
+
+# Tip: Run a pristine build if rebuilding or switching configurations:
+west build -p auto -b ${boardId} app
+\`\`\`
+
+---
+
+### 5. Flash to Hardware
+
+Connect your board to your computer via USB or debug probe, then execute:
+
+\`\`\`bash
+west flash
+\`\`\`
+
+West automatically detects and invokes the appropriate flashing runner configured for \`${boardId}\` (e.g. OpenOCD, J-Link, pyOCD, esptool, dfu-util, or UF2).
+
+---
+
+### 6. Serial Console Monitoring
+
+Connect a serial terminal emulator at **115200 baud** to view logs and diagnostic printk output:
+
+#### macOS:
+\`\`\`bash
+# Connect using screen (or tio / picocom):
+screen /dev/cu.usbmodem* 115200
+# (To exit screen: press Ctrl+A, then press k, then press y)
+\`\`\`
+
+#### Linux:
+\`\`\`bash
+picocom -b 115200 /dev/ttyACM0
+\`\`\`
+
+---
+
+## Enabled Modules & Subsystems
+
+${modsTable}
+
+---
+
+## Workspace Structure
+
+\`\`\`
+${config.name}/
+├── .venv/            # Python virtual environment at workspace root
+├── .gitignore        # Git ignore rules (ignores .venv, build, zephyr, modules)
+├── README.md         # This workspace guide
+└── app/              # Application manifest repository
+    ├── west.yml      # West manifest with minimized name-allowlist
+    ├── CMakeLists.txt# CMake application build script
+    ├── prj.conf      # Kconfig project settings
+    ├── sample.yaml   # Twister automated test metadata
+    └── src/
+        └── main.c    # Application entry point with initialized subsystems
+\`\`\`
+`;
+  }
+
+  // Application Only mode
+  return `# ${config.name}
+
+Zephyr RTOS application configured for **${boardName}** (\`${boardId}\`).
+
+| Target Board | Architecture | Vendor | Zephyr Revision | Packaging |
+|:---|:---|:---|:---|:---|
+| **${boardName}** (\`${boardId}\`) | \`${arch.toUpperCase()}\` | ${vendor} | \`${config.zephyrVersion || 'main'}\` | **Application Only (Existing Workspace)** |
+
+> Generated on the fly by **[Zephyr Initializer](https://start.zephyrproject.io)** — Fast project generator for Zephyr RTOS.
+
+---
+
+## Quick Start Guide
+
+This project is packaged as an **application folder** designed to be added directly into your existing Zephyr workspace.
+
+### 1. Add to Existing Zephyr Workspace
+
+Extract or copy this application folder into the root of your existing Zephyr workspace (the directory containing \`zephyr/\` and your workspace \`.venv\`):
+
+\`\`\`bash
+# 1. Copy the application folder into your existing Zephyr workspace:
+cp -r ${config.name} /path/to/your/zephyr-workspace/
+
+# 2. Navigate to your Zephyr workspace root:
+cd /path/to/your/zephyr-workspace/
+\`\`\`
+
+---
+
+### 2. Activate Workspace Virtual Environment
+
+Activate the Python virtual environment located in the \`.venv\` folder at the root of your Zephyr workspace:
+
+\`\`\`bash
+# On macOS / Linux:
+source .venv/bin/activate
+# On Windows (PowerShell):
+.venv\\Scripts\\Activate.ps1
+# On Windows (cmd.exe):
+.venv\\Scripts\\activate.bat
+\`\`\`
+
+---
+
+### 3. Build the Application
+
+From the root of your Zephyr workspace, compile the application targeting **${boardName}**:
+
+\`\`\`bash
+# Build the application:
+west build -b ${boardId} ${config.name}
+
+# Tip: Run a pristine build if rebuilding or switching configurations:
+west build -p auto -b ${boardId} ${config.name}
+\`\`\`
+
+---
+
+### 4. Flash to Hardware
+
+Connect your board to your computer via USB or debug probe, then execute:
+
+\`\`\`bash
+west flash
+\`\`\`
+
+West automatically invokes the appropriate runner configured for \`${boardId}\` (e.g. OpenOCD, J-Link, pyOCD, esptool, dfu-util, or UF2).
+
+---
+
+### 5. Serial Console Monitoring
+
+Connect a serial terminal emulator at **115200 baud** to view logs and diagnostic printk output:
+
+#### macOS:
+\`\`\`bash
+screen /dev/cu.usbmodem* 115200
+\`\`\`
+
+#### Linux:
+\`\`\`bash
+picocom -b 115200 /dev/ttyACM0
+\`\`\`
+
+---
+
+## Enabled Modules & Subsystems
+
+${modsTable}
+
+---
+
+## Project Structure
+
+\`\`\`
+${config.name}/
+├── CMakeLists.txt   # CMake application configuration
+├── prj.conf         # Kconfig project settings
+├── sample.yaml      # Twister automated test metadata
+├── README.md        # Getting started guide
+├── .gitignore       # Git ignore rules
+└── src/
+    └── main.c       # Application entry point with initialized subsystems
+\`\`\`
+`;
+}
+
 export function generateAllFiles(config: ProjectConfig, modules: Module[], board?: Board): GeneratedFile[] {
+  const isStandalone = config.workspaceType !== 'application';
+
+  if (!isStandalone) {
+    return [
+      {
+        path: 'README.md',
+        name: 'README.md',
+        content: generateReadmeMd(config, modules, board),
+        language: 'markdown',
+      },
+      {
+        path: '.gitignore',
+        name: '.gitignore',
+        content: generateGitignore(),
+        language: 'text',
+      },
+      {
+        path: 'CMakeLists.txt',
+        name: 'CMakeLists.txt',
+        content: generateCMakeLists(config),
+        language: 'cmake',
+      },
+      {
+        path: 'prj.conf',
+        name: 'prj.conf',
+        content: generatePrjConf(config, modules),
+        language: 'ini',
+      },
+      {
+        path: 'src/main.c',
+        name: 'main.c',
+        content: generateMainC(config, modules, board),
+        language: 'c',
+      },
+      {
+        path: 'sample.yaml',
+        name: 'sample.yaml',
+        content: generateSampleYaml(config, board),
+        language: 'yaml',
+      },
+    ];
+  }
+
+  // Standalone / Dedicated Workspace mode
   return [
-    {
-      path: 'west.yml',
-      name: 'west.yml',
-      content: generateWestManifest(config, modules, board),
-      language: 'yaml',
-    },
-    {
-      path: 'CMakeLists.txt',
-      name: 'CMakeLists.txt',
-      content: generateCMakeLists(config),
-      language: 'cmake',
-    },
-    {
-      path: 'prj.conf',
-      name: 'prj.conf',
-      content: generatePrjConf(config, modules),
-      language: 'ini',
-    },
-    {
-      path: 'src/main.c',
-      name: 'main.c',
-      content: generateMainC(config, modules, board),
-      language: 'c',
-    },
     {
       path: 'README.md',
       name: 'README.md',
@@ -610,16 +743,40 @@ export function generateAllFiles(config: ProjectConfig, modules: Module[], board
       language: 'markdown',
     },
     {
-      path: 'sample.yaml',
-      name: 'sample.yaml',
-      content: generateSampleYaml(config, board),
-      language: 'yaml',
-    },
-    {
       path: '.gitignore',
       name: '.gitignore',
       content: generateGitignore(),
       language: 'text',
+    },
+    {
+      path: 'app/west.yml',
+      name: 'west.yml',
+      content: generateWestManifest(config, modules, board),
+      language: 'yaml',
+    },
+    {
+      path: 'app/CMakeLists.txt',
+      name: 'CMakeLists.txt',
+      content: generateCMakeLists(config),
+      language: 'cmake',
+    },
+    {
+      path: 'app/prj.conf',
+      name: 'prj.conf',
+      content: generatePrjConf(config, modules),
+      language: 'ini',
+    },
+    {
+      path: 'app/src/main.c',
+      name: 'main.c',
+      content: generateMainC(config, modules, board),
+      language: 'c',
+    },
+    {
+      path: 'app/sample.yaml',
+      name: 'sample.yaml',
+      content: generateSampleYaml(config, board),
+      language: 'yaml',
     },
   ];
 }

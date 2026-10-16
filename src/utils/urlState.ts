@@ -5,7 +5,9 @@ export function encodeProjectState(config: ProjectConfig): string {
   params.set('name', config.name);
   params.set('version', config.zephyrVersion);
   params.set('board', config.boardId);
-  params.set('template', config.templateId);
+  if (config.workspaceType) {
+    params.set('workspace', config.workspaceType);
+  }
   if (config.selectedModuleIds.length > 0) {
     params.set('modules', config.selectedModuleIds.join(','));
   }
@@ -22,10 +24,11 @@ export function decodeProjectState(): Partial<ProjectConfig> | null {
     const version = params.get('version');
     const board = params.get('board');
     const template = params.get('template');
+    const workspace = params.get('workspace');
     const modulesStr = params.get('modules');
     const kconfigStr = params.get('kconfig');
 
-    if (!name && !version && !board && !modulesStr) {
+    if (!name && !version && !board && !modulesStr && !workspace) {
       return null;
     }
 
@@ -34,6 +37,9 @@ export function decodeProjectState(): Partial<ProjectConfig> | null {
     if (version) state.zephyrVersion = version;
     if (board) state.boardId = board;
     if (template) state.templateId = template;
+    if (workspace === 'standalone' || workspace === 'application') {
+      state.workspaceType = workspace;
+    }
     if (modulesStr) state.selectedModuleIds = modulesStr.split(',').filter(Boolean);
     if (kconfigStr) {
       state.customKconfig = decodeURIComponent(kconfigStr).split(';').filter(Boolean);

@@ -1,4 +1,4 @@
-# ⚡ Zephyr Initializer
+# Zephyr Initializer
 
 > A fast web-based project generator for [Zephyr RTOS](https://www.zephyrproject.org/).
 
@@ -8,7 +8,7 @@ No backend server is required — everything runs entirely client-side and can b
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
 * **Zero-Bloat West Manifests (`name-allowlist`)**:
   Standard Zephyr West manifests often clone dozens of vendor HALs and third-party modules totaling gigabytes of download. Zephyr Initializer generates an allowlisted `west.yml` that only clones the specific HAL for your board (e.g. `hal_nordic`, `hal_stm32`, `hal_espressif`, `hal_rpi_pico`) and only the specific modules you enable (e.g. `mbedtls`, `littlefs`, `lvgl`).
@@ -26,7 +26,7 @@ No backend server is required — everything runs entirely client-side and can b
 
 ---
 
-## 🛠 Project Structure
+## Project Structure
 
 ```
 zephyr-initializer/
@@ -63,7 +63,7 @@ zephyr-initializer/
 
 ---
 
-## 📦 Getting Started (Local Development)
+## Getting Started (Local Development)
 
 ```bash
 # 1. Install dependencies
@@ -81,7 +81,7 @@ npm run preview
 
 ---
 
-## 🌐 Deploying to GitHub Pages
+## Deploying to GitHub Pages
 
 Because Zephyr Initializer runs 100% client-side without any server requirement, it can be deployed directly to GitHub Pages:
 
@@ -114,6 +114,6 @@ Because Zephyr Initializer runs 100% client-side without any server requirement,
 
 ---
 
-## 📄 License
+## License
 
 Apache-2.0

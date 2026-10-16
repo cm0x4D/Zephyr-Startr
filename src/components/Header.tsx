@@ -1,5 +1,5 @@
 import React from 'react';
-import { ExternalLink, Key, RefreshCw, BookOpen } from 'lucide-react';
+import { ExternalLink, Key, RefreshCw, BookOpen, Cpu } from 'lucide-react';
 import type { Release } from '../types';
 
 interface HeaderProps {
@@ -26,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="header-container">
         <div className="header-brand">
           <div className="logo-badge">
-            <span className="logo-icon">⚡</span>
+            <Cpu className="logo-svg" />
           </div>
           <div className="brand-text">
             <div className="brand-title-row">

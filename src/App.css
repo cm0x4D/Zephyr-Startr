@@ -44,8 +44,11 @@
   box-shadow: 0 0 16px rgba(79, 70, 229, 0.4);
 }
 
-.logo-icon {
-  font-size: 1.5rem;
+.logo-icon,
+.logo-svg {
+  width: 24px;
+  height: 24px;
+  color: #ffffff;
 }
 
 .brand-title-row {
@@ -418,6 +421,224 @@
 .btn-link-action:hover {
   color: #ffffff;
   text-decoration: underline;
+}
+
+/* Workspace Packaging & Mode */
+.label-with-hint {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.form-hint-badge {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+.workspace-toggle-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .workspace-toggle-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.workspace-card {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  background-color: var(--bg-root);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  width: 100%;
+}
+
+.workspace-card:hover {
+  border-color: var(--border-light);
+  background-color: var(--bg-surface-elevated);
+  transform: translateY(-1px);
+}
+
+.workspace-card.selected {
+  border-color: var(--accent);
+  background-color: rgba(99, 102, 241, 0.08);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.workspace-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.6rem;
+}
+
+.workspace-icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  background-color: var(--accent-bg);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+}
+
+.workspace-title-box {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.workspace-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.workspace-card.selected .workspace-title {
+  color: #ffffff;
+}
+
+.workspace-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.workspace-badge.recommended {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: var(--primary);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.workspace-badge.existing {
+  background-color: rgba(99, 102, 241, 0.15);
+  color: var(--accent-light);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+.check-icon {
+  margin-left: auto;
+}
+
+.workspace-desc {
+  font-size: 0.775rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin-bottom: 0.75rem;
+}
+
+.workspace-desc code {
+  color: var(--accent-light);
+  background-color: var(--bg-surface-elevated);
+  padding: 0.1rem 0.3rem;
+  border-radius: var(--radius-sm);
+}
+
+.workspace-perks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: auto;
+}
+
+.perk-tag {
+  font-size: 0.675rem;
+  color: var(--text-dim);
+  background-color: var(--bg-surface-elevated);
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.workspace-explanation-callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background-color: rgba(99, 102, 241, 0.06);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  margin-top: 0.5rem;
+}
+
+.callout-icon {
+  margin-top: 0.15rem;
+  flex-shrink: 0;
+}
+
+.callout-content {
+  font-size: 0.775rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.callout-heading {
+  color: var(--text-main);
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.callout-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.callout-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+}
+
+.callout-bullet {
+  color: var(--accent-light);
+}
+
+.callout-item strong {
+  color: var(--text-main);
+}
+
+.callout-item code,
+.callout-note code {
+  color: var(--accent-light);
+  background-color: rgba(0, 0, 0, 0.25);
+  padding: 0.05rem 0.3rem;
+  border-radius: var(--radius-sm);
+}
+
+.callout-note {
+  margin-top: 0.6rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed rgba(99, 102, 241, 0.25);
+  color: var(--text-main);
+}
+
+.callout-note strong {
+  color: #34d399;
+}
+
+.summary-type {
+  color: var(--accent-light);
+  font-weight: 600;
+  font-size: 0.8rem;
+  background-color: rgba(99, 102, 241, 0.12);
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(99, 102, 241, 0.25);
 }
 
 .board-preview-card {

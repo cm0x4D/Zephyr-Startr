@@ -61,6 +61,7 @@ const DEFAULT_CONFIG: ProjectConfig = {
   templateId: 'blinky',
   selectedModuleIds: ['logging', 'console', 'gpio'],
   customKconfig: [],
+  workspaceType: 'standalone',
 };
 
 export const App: React.FC = () => {
