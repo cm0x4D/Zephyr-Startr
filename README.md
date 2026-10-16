@@ -1,8 +1,8 @@
-# ⚡ ZephyrInit — Zephyr Project Initializr
+# ⚡ Zephyr Initializer
 
-> A web-based project generator for [Zephyr RTOS](https://www.zephyrproject.org/), inspired by [start.spring.io](https://start.spring.io).
+> A fast web-based project generator for [Zephyr RTOS](https://www.zephyrproject.org/).
 
-ZephyrInit generates minimal, ready-to-compile **West workspace** archives directly in your browser. It configures West manifests, CMake build scripts, Kconfig options, and starter C application source code tailored to your exact hardware board and selected subsystems.
+Zephyr Initializer generates minimal, ready-to-compile **West workspace** archives directly in your browser. It configures West manifests, CMake build scripts, Kconfig options, and starter C application source code tailored to your exact hardware board and selected subsystems.
 
 No backend server is required — everything runs entirely client-side and can be hosted statically on **GitHub Pages**.
 
@@ -11,12 +11,12 @@ No backend server is required — everything runs entirely client-side and can b
 ## 🚀 Key Features
 
 * **Zero-Bloat West Manifests (`name-allowlist`)**:
-  Standard Zephyr West manifests often clone dozens of vendor HALs and third-party modules totaling gigabytes of download. ZephyrInit generates an allowlisted `west.yml` that only clones the specific HAL for your board (e.g. `hal_nordic`, `hal_stm32`, `hal_espressif`, `hal_rpi_pico`) and only the specific modules you enable (e.g. `mbedtls`, `littlefs`, `lvgl`).
+  Standard Zephyr West manifests often clone dozens of vendor HALs and third-party modules totaling gigabytes of download. Zephyr Initializer generates an allowlisted `west.yml` that only clones the specific HAL for your board (e.g. `hal_nordic`, `hal_stm32`, `hal_espressif`, `hal_rpi_pico`) and only the specific modules you enable (e.g. `mbedtls`, `littlefs`, `lvgl`).
 * **1,750+ Verified Hardware Boards**:
   Search and filter across all official Zephyr dev boards and targets (ARM, RISC-V, Xtensa, x86, POSIX Simulator) with instant search, vendor chips, and architecture badges.
 * **Online Sync with Resilient Offline Fallback**:
   Queries the latest official Zephyr releases and boards from the GitHub API on load, while bundling an offline database to ensure zero downtime even if GitHub rate limits are reached.
-* **Spring Initializr UX**:
+* **Fast, Intuitive UX**:
   * **Interactive Explorer (`Ctrl + Space`)**: View file tree and syntax-highlighted code preview before downloading.
   * **One-Click Generate (`Ctrl + ⏎`)**: Creates and downloads `{projectName}.zip` on the fly using JSZip.
   * **Shareable Links**: Encodes project configurations into the URL for instant sharing and bookmarking.
@@ -29,7 +29,7 @@ No backend server is required — everything runs entirely client-side and can b
 ## 🛠 Project Structure
 
 ```
-ZephyrInit/
+zephyr-initializer/
 ├── public/
 │   └── data/
 │       ├── boards.json       # 1,755 verified boards dataset
@@ -40,7 +40,7 @@ ZephyrInit/
 │   │   ├── ActionBar.tsx     # Sticky footer with Generate, Explore, Share, Reset
 │   │   ├── ApiTokenModal.tsx # Optional GitHub PAT for 5,000 req/hr rate limits
 │   │   ├── BoardModal.tsx    # Searchable modal across 1,750+ boards
-│   │   ├── Dependencies.tsx  # Spring Initializr categorized module browser
+│   │   ├── Dependencies.tsx  # Categorized module & subsystem browser
 │   │   ├── FileExplorerModal.tsx # File tree & syntax viewer (Ctrl + Space)
 │   │   ├── Header.tsx        # Top navbar with live status and doc links
 │   │   ├── KconfigEditor.tsx # Interactive Kconfig override editor & raw mode
@@ -83,7 +83,7 @@ npm run preview
 
 ## 🌐 Deploying to GitHub Pages
 
-Because ZephyrInit runs 100% client-side without any server requirement, it can be deployed directly to GitHub Pages:
+Because Zephyr Initializer runs 100% client-side without any server requirement, it can be deployed directly to GitHub Pages:
 
 1. In `vite.config.ts`, `base: './'` is configured to support root domains and repository subpaths.
 2. Build the project:

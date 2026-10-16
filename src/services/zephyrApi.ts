@@ -1,11 +1,12 @@
 import type { Board, Module, Release } from '../types';
 
 const GITHUB_API_BASE = 'https://api.github.com';
-const TOKEN_KEY = 'zephyrinit_gh_token';
+const TOKEN_KEY = 'zephyr_initializer_gh_token';
+const LEGACY_TOKEN_KEY = 'zephyrinit_gh_token';
 
 export function getStoredGitHubToken(): string {
   try {
-    return localStorage.getItem(TOKEN_KEY) || '';
+    return localStorage.getItem(TOKEN_KEY) || localStorage.getItem(LEGACY_TOKEN_KEY) || '';
   } catch {
     return '';
   }
@@ -70,7 +71,7 @@ export async function fetchReleases(): Promise<{ releases: Release[]; source: 'a
       }
 
       try {
-        localStorage.setItem('zephyrinit_cached_releases', JSON.stringify(releases));
+        localStorage.setItem('zephyr_initializer_cached_releases', JSON.stringify(releases));
       } catch {
         // Ignore cache write error
       }
@@ -83,7 +84,7 @@ export async function fetchReleases(): Promise<{ releases: Release[]; source: 'a
 
   // Try cached releases
   try {
-    const cached = localStorage.getItem('zephyrinit_cached_releases');
+    const cached = localStorage.getItem('zephyr_initializer_cached_releases') || localStorage.getItem('zephyrinit_cached_releases');
     if (cached) {
       return { releases: JSON.parse(cached), source: 'cached' };
     }
@@ -100,8 +101,8 @@ export async function fetchReleases(): Promise<{ releases: Release[]; source: 'a
 export async function fetchBoards(): Promise<{ boards: Board[]; source: 'api' | 'cached' | 'bundled' }> {
   // Check local storage cache first if within 24 hours
   try {
-    const cached = localStorage.getItem('zephyrinit_cached_boards');
-    const cachedTime = localStorage.getItem('zephyrinit_cached_boards_time');
+    const cached = localStorage.getItem('zephyr_initializer_cached_boards') || localStorage.getItem('zephyrinit_cached_boards');
+    const cachedTime = localStorage.getItem('zephyr_initializer_cached_boards_time') || localStorage.getItem('zephyrinit_cached_boards_time');
     if (cached && cachedTime && Date.now() - parseInt(cachedTime, 10) < 24 * 60 * 60 * 1000) {
       return { boards: JSON.parse(cached), source: 'cached' };
     }
@@ -115,8 +116,8 @@ export async function fetchBoards(): Promise<{ boards: Board[]; source: 'api' | 
     if (res.ok) {
       const boards: Board[] = await res.json();
       try {
-        localStorage.setItem('zephyrinit_cached_boards', JSON.stringify(boards));
-        localStorage.setItem('zephyrinit_cached_boards_time', Date.now().toString());
+        localStorage.setItem('zephyr_initializer_cached_boards', JSON.stringify(boards));
+        localStorage.setItem('zephyr_initializer_cached_boards_time', Date.now().toString());
       } catch {
         // Storage limit might be reached
       }

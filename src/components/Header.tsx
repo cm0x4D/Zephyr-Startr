@@ -30,8 +30,8 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
           <div className="brand-text">
             <div className="brand-title-row">
-              <h1 className="brand-title">ZephyrInit</h1>
-              <span className="brand-tag">Spring Initializr for Zephyr RTOS</span>
+              <h1 className="brand-title">Zephyr Initializer</h1>
+              <span className="brand-tag">Project Generator for Zephyr RTOS</span>
             </div>
             <p className="brand-subtitle">
               Instantly configure, minimize West manifests, and generate ready-to-flash Zephyr workspaces

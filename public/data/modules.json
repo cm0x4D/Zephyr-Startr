@@ -65,7 +65,7 @@
     "includes": [
       "<zephyr/sys/printk.h>"
     ],
-    "mainInit": "printk(\"ZephyrInit Application Booted!\\n\");\n"
+    "mainInit": "printk(\"Zephyr Initializer Application Booted!\\n\");\n"
   },
   {
     "id": "timing",
