@@ -433,7 +433,7 @@
 
 .form-hint-badge {
   font-size: 0.7rem;
-  color: var(--text-dim);
+  color: #94a3b8;
 }
 
 .workspace-toggle-grid {
@@ -655,6 +655,7 @@
   cursor: pointer;
   transition: all 0.15s ease;
   width: 100%;
+  color: #ffffff;
 }
 
 .lang-card:hover {
@@ -665,7 +666,7 @@
 
 .lang-card.selected {
   border-color: var(--accent);
-  background-color: rgba(99, 102, 241, 0.08);
+  background-color: rgba(99, 102, 241, 0.15);
   box-shadow: 0 0 0 1px var(--accent);
 }
 
@@ -679,12 +680,12 @@
 .lang-title {
   font-size: 0.95rem;
   font-weight: 700;
-  color: var(--text-light);
+  color: #ffffff;
 }
 
 .lang-sub {
   font-size: 0.72rem;
-  color: var(--accent);
+  color: #e0e7ff;
   font-weight: 600;
   margin-bottom: 0.4rem;
   font-family: var(--font-mono);
@@ -692,17 +693,34 @@
 
 .lang-desc {
   font-size: 0.78rem;
-  color: var(--text-muted);
+  color: #f8fafc;
   line-height: 1.35;
   margin: 0;
 }
 
 .lang-desc code {
-  color: var(--accent-light);
-  background-color: var(--bg-surface-elevated);
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.15);
   padding: 0.05rem 0.25rem;
   border-radius: var(--radius-sm);
   font-size: 0.74rem;
+}
+
+.lang-card.selected .lang-title {
+  color: #ffffff;
+}
+
+.lang-card.selected .lang-sub {
+  color: #ffffff;
+}
+
+.lang-card.selected .lang-desc {
+  color: #ffffff;
+}
+
+.lang-card.selected .lang-desc code {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.25);
 }
 
 .summary-type {
