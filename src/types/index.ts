@@ -44,12 +44,14 @@ export interface ProjectTemplate {
 }
 
 export type WorkspaceType = 'standalone' | 'application';
+export type Language = 'c' | 'cpp' | 'rust';
 
 export interface ProjectConfig {
   name: string;
   zephyrVersion: string;
   boardId: string;
   templateId: string;
+  language: Language;
   selectedModuleIds: string[];
   customKconfig: string[];
   workspaceType: WorkspaceType;
@@ -59,5 +61,5 @@ export interface GeneratedFile {
   path: string;
   name: string;
   content: string;
-  language: 'c' | 'cmake' | 'yaml' | 'ini' | 'markdown' | 'text';
+  language: 'c' | 'cpp' | 'rust' | 'cmake' | 'yaml' | 'ini' | 'markdown' | 'text' | 'toml';
 }

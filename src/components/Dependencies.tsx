@@ -21,9 +21,11 @@ export const Dependencies: React.FC<DependenciesProps> = ({
   const categories = useMemo(() => {
     const set = new Set<string>();
     for (const m of modules) {
-      if (m.category) set.add(m.category);
+      if (m.category && m.category !== 'Programming Languages') set.add(m.category);
     }
-    return ['All', ...Array.from(set).sort()];
+    const hasLang = modules.some((m) => m.category === 'Programming Languages');
+    const sorted = Array.from(set).sort();
+    return hasLang ? ['All', 'Programming Languages', ...sorted] : ['All', ...sorted];
   }, [modules]);
 
   const selectedSet = useMemo(() => new Set(selectedModuleIds), [selectedModuleIds]);
@@ -99,7 +101,7 @@ export const Dependencies: React.FC<DependenciesProps> = ({
           <input
             type="text"
             className="search-input"
-            placeholder="Search modules (e.g. logging, wifi, ble, sensor, fatfs, mbedtls, lvgl)..."
+            placeholder="Search modules (e.g. logging, wifi, ble, sensor, rust, cpp, fatfs, mbedtls, lvgl)..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
@@ -129,9 +131,11 @@ export const Dependencies: React.FC<DependenciesProps> = ({
       <div className="modules-list">
         {filteredModules.map((m) => {
           const isSelected = selectedSet.has(m.id);
+          const isLang = m.category === 'Programming Languages';
           const hasMissingDeps =
             m.dependencies &&
             m.dependencies.some((depId) => !selectedSet.has(depId));
+          const catClass = `cat-${m.category.toLowerCase().replace(/\s+/g, '-')}`;
 
           return (
             <div
@@ -143,7 +147,7 @@ export const Dependencies: React.FC<DependenciesProps> = ({
                 <div className="module-title-row">
                   <div className="module-name-group">
                     <span className="module-name">{m.name}</span>
-                    <span className={`category-tag cat-${m.category.toLowerCase()}`}>
+                    <span className={`category-tag ${catClass}`}>
                       {m.category}
                     </span>
                   </div>
@@ -157,11 +161,11 @@ export const Dependencies: React.FC<DependenciesProps> = ({
                   >
                     {isSelected ? (
                       <>
-                        <Check className="icon-xs" /> Added
+                        <Check className="icon-xs" /> {isLang ? 'Active Language' : 'Added'}
                       </>
                     ) : (
                       <>
-                        <Plus className="icon-xs" /> Add
+                        <Plus className="icon-xs" /> {isLang ? 'Select' : 'Add'}
                       </>
                     )}
                   </button>
@@ -180,10 +184,16 @@ export const Dependencies: React.FC<DependenciesProps> = ({
                       Requires: {m.dependencies.join(', ')}
                     </span>
                   )}
-                  <span className="meta-kconfig-preview" title={m.kconfig.join('\n')}>
-                    {m.kconfig[0]}
-                    {m.kconfig.length > 1 ? ` (+${m.kconfig.length - 1})` : ''}
-                  </span>
+                  {m.kconfig.length > 0 ? (
+                    <span className="meta-kconfig-preview" title={m.kconfig.join('\n')}>
+                      {m.kconfig[0]}
+                      {m.kconfig.length > 1 ? ` (+${m.kconfig.length - 1})` : ''}
+                    </span>
+                  ) : (
+                    <span className="meta-kconfig-preview">
+                      Entry: {m.id === 'lang-rust' ? 'src/lib.rs' : (m.id === 'lang-cpp' ? 'src/main.cpp' : 'src/main.c')}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>

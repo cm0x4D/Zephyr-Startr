@@ -1,5 +1,62 @@
 [
   {
+    "id": "lang-c",
+    "name": "C Language (Standard C99 / C11)",
+    "category": "Programming Languages",
+    "description": "Standard embedded C (C99/C11/C23) application code (main.c) using native Zephyr RTOS APIs.",
+    "kconfig": [],
+    "tags": [
+      "c",
+      "c99",
+      "c11",
+      "language",
+      "native"
+    ],
+    "defaultSelected": true,
+    "includes": [
+      "<zephyr/kernel.h>"
+    ]
+  },
+  {
+    "id": "lang-cpp",
+    "name": "C++ Language (Modern C++17 / C++20)",
+    "category": "Programming Languages",
+    "description": "Modern embedded C++ application code (main.cpp) with Zephyr C++ standard library support, classes, and STL.",
+    "kconfig": [
+      "CONFIG_CPP=y",
+      "CONFIG_STD_CPP17=y",
+      "CONFIG_REQUIRES_FULL_LIBCPP=y"
+    ],
+    "tags": [
+      "cpp",
+      "c++",
+      "c++17",
+      "c++20",
+      "language",
+      "stl",
+      "oop"
+    ],
+    "includes": [
+      "<zephyr/kernel.h>"
+    ]
+  },
+  {
+    "id": "lang-rust",
+    "name": "Rust Language (Bare-metal Embedded)",
+    "category": "Programming Languages",
+    "description": "Memory-safe embedded systems programming with Rust (src/lib.rs, Cargo.toml) integrated with Zephyr RTOS.",
+    "kconfig": [
+      "CONFIG_RUST=y"
+    ],
+    "tags": [
+      "rust",
+      "cargo",
+      "memory-safety",
+      "language",
+      "embedded-rust"
+    ]
+  },
+  {
     "id": "logging",
     "name": "Logging Subsystem",
     "category": "Core",

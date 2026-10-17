@@ -59,7 +59,8 @@ const DEFAULT_CONFIG: ProjectConfig = {
   zephyrVersion: 'v4.4.2',
   boardId: 'nrf52840dk/nrf52840',
   templateId: 'blinky',
-  selectedModuleIds: ['logging', 'console', 'gpio'],
+  language: 'c',
+  selectedModuleIds: ['lang-c', 'logging', 'console', 'gpio'],
   customKconfig: [],
   workspaceType: 'standalone',
 };
@@ -67,7 +68,14 @@ const DEFAULT_CONFIG: ProjectConfig = {
 export const App: React.FC = () => {
   const [config, setConfig] = useState<ProjectConfig>(() => {
     const urlState = decodeProjectState();
-    return urlState ? { ...DEFAULT_CONFIG, ...urlState } : DEFAULT_CONFIG;
+    if (!urlState) return DEFAULT_CONFIG;
+    const initialConfig = { ...DEFAULT_CONFIG, ...urlState };
+    // Ensure language module is in selectedModuleIds
+    const langModuleId = initialConfig.language === 'cpp' ? 'lang-cpp' : (initialConfig.language === 'rust' ? 'lang-rust' : 'lang-c');
+    const langModules = ['lang-c', 'lang-cpp', 'lang-rust'];
+    const filtered = initialConfig.selectedModuleIds.filter((id) => !langModules.includes(id));
+    initialConfig.selectedModuleIds = [langModuleId, ...filtered];
+    return initialConfig;
   });
 
   const [boards, setBoards] = useState<Board[]>([]);
@@ -182,13 +190,39 @@ export const App: React.FC = () => {
 
   // Handle configuration changes
   const handleChangeConfig = useCallback((updates: Partial<ProjectConfig>) => {
-    setConfig((prev) => ({ ...prev, ...updates }));
+    setConfig((prev) => {
+      const next = { ...prev, ...updates };
+      if (updates.language && updates.language !== prev.language) {
+        const langModuleMap: Record<string, string> = {
+          c: 'lang-c',
+          cpp: 'lang-cpp',
+          rust: 'lang-rust',
+        };
+        const langModules = ['lang-c', 'lang-cpp', 'lang-rust'];
+        const nonLang = prev.selectedModuleIds.filter((id) => !langModules.includes(id));
+        next.selectedModuleIds = [langModuleMap[updates.language] || 'lang-c', ...nonLang];
+      }
+      return next;
+    });
   }, []);
 
-  // Handle module toggling (with automatic dependency resolution)
+  // Handle module toggling (with automatic dependency resolution and language group exclusivity)
   const handleToggleModule = useCallback(
     (moduleId: string) => {
       setConfig((prev) => {
+        const langModules = ['lang-c', 'lang-cpp', 'lang-rust'];
+
+        if (langModules.includes(moduleId)) {
+          // Mutually exclusive single selection for programming language modules
+          const newLang = moduleId === 'lang-cpp' ? 'cpp' : (moduleId === 'lang-rust' ? 'rust' : 'c');
+          const nonLang = prev.selectedModuleIds.filter((id) => !langModules.includes(id));
+          return {
+            ...prev,
+            language: newLang,
+            selectedModuleIds: [moduleId, ...nonLang],
+          };
+        }
+
         const isSelected = prev.selectedModuleIds.includes(moduleId);
         let updated: string[];
 
@@ -220,10 +254,22 @@ export const App: React.FC = () => {
   );
 
   const handleRemoveModule = useCallback((moduleId: string) => {
-    setConfig((prev) => ({
-      ...prev,
-      selectedModuleIds: prev.selectedModuleIds.filter((id) => id !== moduleId),
-    }));
+    setConfig((prev) => {
+      const langModules = ['lang-c', 'lang-cpp', 'lang-rust'];
+      if (langModules.includes(moduleId)) {
+        // If user tries to remove the active language module, reset back to C
+        const nonLang = prev.selectedModuleIds.filter((id) => !langModules.includes(id));
+        return {
+          ...prev,
+          language: 'c',
+          selectedModuleIds: ['lang-c', ...nonLang],
+        };
+      }
+      return {
+        ...prev,
+        selectedModuleIds: prev.selectedModuleIds.filter((id) => id !== moduleId),
+      };
+    });
   }, []);
 
   // Action Bar Handlers
@@ -301,12 +347,13 @@ export const App: React.FC = () => {
               <Terminal className="icon-sm text-accent" />
             </div>
             <div className="banner-text-col">
-              <strong>Zero-Bloat West Manifests:</strong> Zephyr-Startr configures West manifest{' '}
-              <code>name-allowlist</code> so your workspace only clones the exact HAL and modules required for{' '}
+              <strong>All-Inclusive West Manifests with Shallow Clones:</strong> Zephyr-Startr lists all upstream Zephyr modules in{' '}
+              <code>name-allowlist</code>, actively enabling only the required HAL for{' '}
               <span className="text-light font-bold">
                 {currentBoard ? currentBoard.name : config.boardId}
               </span>
-              . No unnecessary repositories or multi-gigabyte downloads.
+              , {config.language === 'cpp' ? 'C++17' : (config.language === 'rust' ? 'Embedded Rust' : 'C')} support, and your enabled subsystems while commenting out unused repositories. Use{' '}
+              <code>west update -n</code> for fast, shallow git clones.
             </div>
           </div>
 

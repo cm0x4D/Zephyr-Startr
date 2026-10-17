@@ -1,10 +1,13 @@
-import type { ProjectConfig } from '../types';
+import type { Language, ProjectConfig } from '../types';
 
 export function encodeProjectState(config: ProjectConfig): string {
   const params = new URLSearchParams();
   params.set('name', config.name);
   params.set('version', config.zephyrVersion);
   params.set('board', config.boardId);
+  if (config.language) {
+    params.set('lang', config.language);
+  }
   if (config.workspaceType) {
     params.set('workspace', config.workspaceType);
   }
@@ -24,11 +27,12 @@ export function decodeProjectState(): Partial<ProjectConfig> | null {
     const version = params.get('version');
     const board = params.get('board');
     const template = params.get('template');
+    const lang = params.get('lang') as Language;
     const workspace = params.get('workspace');
     const modulesStr = params.get('modules');
     const kconfigStr = params.get('kconfig');
 
-    if (!name && !version && !board && !modulesStr && !workspace) {
+    if (!name && !version && !board && !modulesStr && !workspace && !lang) {
       return null;
     }
 
@@ -40,7 +44,17 @@ export function decodeProjectState(): Partial<ProjectConfig> | null {
     if (workspace === 'standalone' || workspace === 'application') {
       state.workspaceType = workspace;
     }
-    if (modulesStr) state.selectedModuleIds = modulesStr.split(',').filter(Boolean);
+    if (lang === 'c' || lang === 'cpp' || lang === 'rust') {
+      state.language = lang;
+    }
+    if (modulesStr) {
+      state.selectedModuleIds = modulesStr.split(',').filter(Boolean);
+      if (!state.language) {
+        if (state.selectedModuleIds.includes('lang-cpp')) state.language = 'cpp';
+        else if (state.selectedModuleIds.includes('lang-rust')) state.language = 'rust';
+        else if (state.selectedModuleIds.includes('lang-c')) state.language = 'c';
+      }
+    }
     if (kconfigStr) {
       state.customKconfig = decodeURIComponent(kconfigStr).split(';').filter(Boolean);
     }

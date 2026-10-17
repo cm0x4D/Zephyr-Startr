@@ -115,7 +115,7 @@ export const ProjectSettings: React.FC<ProjectSettingsProps> = ({
               )}
             </div>
             <span className="form-hint">
-              Upstream Zephyr git revision checked out into workspace during <code>west update</code>
+              Upstream Zephyr git revision checked out into workspace during <code>west update -n</code>
             </span>
           </div>
         </div>
@@ -201,6 +201,55 @@ export const ProjectSettings: React.FC<ProjectSettingsProps> = ({
                 <strong>Python Virtual Environment:</strong> In both options, the virtual environment is the <code>.venv</code> folder located directly at the root of the Zephyr workspace folder.
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Programming Language Selector */}
+        <div className="form-group full-width">
+          <div className="label-with-hint">
+            <label className="form-label">Programming Language</label>
+            <span className="form-hint-badge">Single selection (C, C++, or Rust)</span>
+          </div>
+
+          <div className="language-toggle-grid">
+            <button
+              type="button"
+              className={`lang-card ${config.language === 'c' ? 'selected' : ''}`}
+              onClick={() => onChangeConfig({ language: 'c' })}
+            >
+              <div className="lang-card-header">
+                <span className="lang-title">C Language</span>
+                {config.language === 'c' && <Check className="icon-xs text-accent" />}
+              </div>
+              <span className="lang-sub">Standard C99 / C11</span>
+              <p className="lang-desc">Standard embedded C (<code>main.c</code>) using native Zephyr RTOS system calls and kernel APIs.</p>
+            </button>
+
+            <button
+              type="button"
+              className={`lang-card ${config.language === 'cpp' ? 'selected' : ''}`}
+              onClick={() => onChangeConfig({ language: 'cpp' })}
+            >
+              <div className="lang-card-header">
+                <span className="lang-title">C++ Language</span>
+                {config.language === 'cpp' && <Check className="icon-xs text-accent" />}
+              </div>
+              <span className="lang-sub">Modern C++17 / C++20</span>
+              <p className="lang-desc">Modern C++ embedded development (<code>main.cpp</code>) with <code>CONFIG_CPP=y</code>, classes, and STL support.</p>
+            </button>
+
+            <button
+              type="button"
+              className={`lang-card ${config.language === 'rust' ? 'selected' : ''}`}
+              onClick={() => onChangeConfig({ language: 'rust' })}
+            >
+              <div className="lang-card-header">
+                <span className="lang-title">Rust Language</span>
+                {config.language === 'rust' && <Check className="icon-xs text-accent" />}
+              </div>
+              <span className="lang-sub">Bare-Metal no_std</span>
+              <p className="lang-desc">Memory-safe systems programming (<code>src/lib.rs</code>, <code>Cargo.toml</code>) with <code>CONFIG_RUST=y</code>.</p>
+            </button>
           </div>
         </div>
 

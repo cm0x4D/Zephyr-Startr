@@ -631,6 +631,80 @@
   color: #34d399;
 }
 
+/* Programming Language Toggle Grid */
+.language-toggle-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+}
+
+@media (max-width: 768px) {
+  .language-toggle-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.lang-card {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  background-color: var(--bg-root);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  width: 100%;
+}
+
+.lang-card:hover {
+  border-color: var(--border-light);
+  background-color: var(--bg-surface-elevated);
+  transform: translateY(-1px);
+}
+
+.lang-card.selected {
+  border-color: var(--accent);
+  background-color: rgba(99, 102, 241, 0.08);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.lang-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.2rem;
+}
+
+.lang-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-light);
+}
+
+.lang-sub {
+  font-size: 0.72rem;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  font-family: var(--font-mono);
+}
+
+.lang-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+  margin: 0;
+}
+
+.lang-desc code {
+  color: var(--accent-light);
+  background-color: var(--bg-surface-elevated);
+  padding: 0.05rem 0.25rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.74rem;
+}
+
 .summary-type {
   color: var(--accent-light);
   font-weight: 600;
@@ -998,6 +1072,7 @@
 .category-tag.cat-security { background: rgba(248, 113, 113, 0.15); color: var(--cat-security); }
 .category-tag.cat-system { background: rgba(192, 132, 252, 0.15); color: var(--cat-system); }
 .category-tag.cat-libraries { background: rgba(45, 212, 191, 0.15); color: var(--cat-libraries); }
+.category-tag.cat-programming-languages { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
 
 .module-action-btn {
   display: flex;

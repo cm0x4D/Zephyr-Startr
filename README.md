@@ -2,7 +2,7 @@
 
 > A fast web-based project generator for [Zephyr RTOS](https://www.zephyrproject.org/).
 
-Zephyr-Startr generates minimal, ready-to-compile **West workspace** archives directly in your browser. It configures West manifests, CMake build scripts, Kconfig options, and starter C application source code tailored to your exact hardware board and selected subsystems.
+Zephyr-Startr generates minimal, ready-to-compile **West workspace** archives directly in your browser. It configures West manifests, CMake build scripts, Kconfig options, and starter application source code in **C**, **C++**, or **Rust** tailored to your exact hardware board and selected subsystems.
 
 No backend server is required — everything runs entirely client-side and can be hosted statically on **GitHub Pages**.
 
@@ -10,8 +10,12 @@ No backend server is required — everything runs entirely client-side and can b
 
 ## Key Features
 
-* **Zero-Bloat West Manifests (`name-allowlist`)**:
-  Standard Zephyr West manifests often clone dozens of vendor HALs and third-party modules totaling gigabytes of download. Zephyr-Startr generates an allowlisted `west.yml` that only clones the specific HAL for your board (e.g. `hal_nordic`, `hal_stm32`, `hal_espressif`, `hal_rpi_pico`) and only the specific modules you enable (e.g. `mbedtls`, `littlefs`, `lvgl`).
+* **All-Inclusive West Manifests with Shallow Clones (`west update -n`)**:
+  Lists all 80+ upstream Zephyr modules in `app/west.yml`'s `name-allowlist`. Required modules for your target board's CPU architecture (e.g. `cmsis`, `cmsis_6`, `hal_nordic`, `hal_stm32`, `hal_espressif`) and enabled subsystems (e.g. `littlefs`, `lvgl`, `mbedtls`) are actively uncommented, while all other upstream modules are cleanly commented out (`# - <module>`). Running `west update -n` performs shallow git copies (depth 1) of the allowlisted repositories, saving multiple gigabytes of disk space and download time.
+* **Multi-Language Support (C, C++, Rust)**:
+  * **C (Standard)**: Native embedded C99/C11/C23 application code (`main.c`) utilizing Zephyr kernel APIs.
+  * **C++ (Modern)**: Embedded C++17/C++20 (`main.cpp`) with `CONFIG_CPP=y`, classes, and standard C++ libraries (`libstdc++` / `libc++`).
+  * **Rust (Embedded)**: Bare-metal `no_std` systems programming (`src/lib.rs`, `Cargo.toml`) integrated with Zephyr RTOS via `CONFIG_RUST=y`.
 * **1,750+ Verified Hardware Boards**:
   Search and filter across all official Zephyr dev boards and targets (ARM, RISC-V, Xtensa, x86, POSIX Simulator) with instant search, vendor chips, and architecture badges.
 * **Online Sync with Resilient Offline Fallback**:
@@ -22,7 +26,7 @@ No backend server is required — everything runs entirely client-side and can b
   * **Shareable Links**: Encodes project configurations into the URL for instant sharing and bookmarking.
   * **Application Presets**: Quick templates for Blinky / Status LED, Minimal Hello World, Bluetooth LE, Shell CLI, Sensor Reader, and IoT Network Client.
 * **Comprehensive Documentation (`README.md`)**:
-  Every generated ZIP includes a detailed, standalone `README.md` with step-by-step instructions for Python virtual environments (`venv`), host preparation for **macOS** (Homebrew) and Linux/Windows, West workspace initialization (`west init -l <app>`), building (`west build -b <board>`), flashing (`west flash`), and serial terminal monitoring.
+  Every generated ZIP includes a detailed, standalone `README.md` with step-by-step instructions for Python virtual environments (`.venv` at workspace root), host preparation for **macOS** (Homebrew) and Linux/Windows, shallow West workspace initialization (`west init -l app && west update -n`), building (`west build -b <board>`), flashing (`west flash`), and serial terminal monitoring.
 
 ---
 

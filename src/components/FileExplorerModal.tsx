@@ -43,10 +43,10 @@ export const FileExplorerModal: React.FC<FileExplorerModalProps> = ({
   };
 
   const getFileIcon = (name: string) => {
-    if (name.endsWith('.c') || name.endsWith('.h')) {
+    if (name.endsWith('.c') || name.endsWith('.h') || name.endsWith('.cpp') || name.endsWith('.rs')) {
       return <FileCode className="tree-file-icon text-accent" />;
     }
-    if (name.endsWith('.yml') || name.endsWith('.yaml')) {
+    if (name.endsWith('.yml') || name.endsWith('.yaml') || name.endsWith('.toml')) {
       return <FileText className="tree-file-icon text-warning" />;
     }
     if (name === 'CMakeLists.txt') {

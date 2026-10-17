@@ -215,6 +215,31 @@ export async function fetchModules(): Promise<Module[]> {
   // Basic fallback
   return [
     {
+      id: 'lang-c',
+      name: 'C Language',
+      category: 'Programming Languages',
+      description: 'Standard embedded C (C99/C11) application code (main.c)',
+      kconfig: [],
+      tags: ['c', 'language'],
+      defaultSelected: true,
+    },
+    {
+      id: 'lang-cpp',
+      name: 'C++ Language',
+      category: 'Programming Languages',
+      description: 'Modern embedded C++ (C++17) application code (main.cpp)',
+      kconfig: ['CONFIG_CPP=y', 'CONFIG_STD_CPP17=y', 'CONFIG_REQUIRES_FULL_LIBCPP=y'],
+      tags: ['cpp', 'c++', 'language'],
+    },
+    {
+      id: 'lang-rust',
+      name: 'Rust Language',
+      category: 'Programming Languages',
+      description: 'Bare-metal embedded Rust (src/lib.rs, Cargo.toml)',
+      kconfig: ['CONFIG_RUST=y'],
+      tags: ['rust', 'language'],
+    },
+    {
       id: 'logging',
       name: 'Logging Subsystem',
       category: 'Core',
